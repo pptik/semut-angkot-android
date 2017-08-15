@@ -79,18 +79,18 @@ public class TrackerAdapter extends BaseAdapter {
         gpsDetail = (TextView)view.findViewById(R.id.gps_detail);
 
         boolean state = (i == checkedState);
-        String detail = "detail";
+        String detail = "Jurusan : "+angkots[i].getAngkot().getTrayek().getNama();
 
-       /* SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         Date date = new Date(System.currentTimeMillis() - 3600 * 10);
         String dateNow = df.format(date);
-        String dateToCompare = angkots[i].getDate()+" "+ angkots[i].getTime();
+        String dateToCompare = angkots[i].getAngkot().getLastUpdate();
         boolean isExpired = CompareDate.compare(dateToCompare, dateNow);
         if(isExpired) detail += " <br> <b><font color='red'>LOKASI TIDAK UPDATE</font></b>";
-        else detail += " <br> <b><font color='blue'>LOKASI UPDATE</font></b>"; */
+        else detail += " <br> <b><font color='blue'>LOKASI UPDATE</font></b>";
 
-        gpsNameText.setText(angkots[i].getName());
-        gpsLocText.setText(angkots[i].getAngkot().getJumlahPenumpang().toString());
+        gpsNameText.setText(angkots[i].getAngkot().getPlatNomor());
+        gpsLocText.setText("Jumlah Penumpang : "+angkots[i].getAngkot().getJumlahPenumpang().toString());
         gpsDetail.setText(Html.fromHtml(detail), TextView.BufferType.SPANNABLE);
         stateRadio.setChecked(state);
 

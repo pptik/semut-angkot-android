@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#F2F1EF</color>
-    <color name="colorPrimaryBold">#EEEEEE</color>
+    <color name="colorPrimary">#0093dd</color>
+    <color name="colorPrimaryBold">#2574A9</color>
     <color name="colorWhiteDark">#e7e9ea</color>
-    <color name="eucalyptus">#26A65B</color>
-    <color name="colorPrimaryDark">#ff8100</color>
-    <color name="colorAccent">#ff8100</color>
-    <color name="colorSemiDarkPrimary">#af5900</color>
+    <color name="eucalyptus">#2574A9</color>
+    <color name="colorPrimaryDark">#2574A9</color>
+    <color name="colorAccent">#0093dd</color>
+    <color name="colorSemiDarkPrimary">#5C97BF</color>
     <color name="facebookMainColor">#3b5998</color>
     <color name="foregroundLoading">#70000000</color>
     <color name="material_drawer_selected">#ff8100</color>
