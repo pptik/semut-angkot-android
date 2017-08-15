@@ -6,7 +6,7 @@ android {
     buildToolsVersion "25.0.0"
     useLibrary 'org.apache.http.legacy'
     defaultConfig {
-        applicationId "id.blits.semut"
+        applicationId "id.pptik.semutangkot"
         minSdkVersion 16
         targetSdkVersion 25
         multiDexEnabled = true
@@ -75,5 +75,6 @@ dependencies {
     compile 'com.github.ceryle:RadioRealButton:v1.4.4'
     compile 'com.wdullaer:materialdatetimepicker:2.5.0'
     compile 'com.android.support:multidex:1.0.1'
+    compile 'com.karumi:dexter:4.1.0'
     compile files('libs/libphonenumber-8.4.0.jar')
 }

@@ -8,15 +8,27 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.WindowManager;
 import android.view.Window;
 import android.widget.Toast;
 
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.MultiplePermissionsReport;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.PermissionDeniedResponse;
+import com.karumi.dexter.listener.PermissionGrantedResponse;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
+
+import java.util.List;
+
 import project.bsts.semut.helper.PermissionHelper;
 import project.bsts.semut.ui.CommonAlerts;
 import project.bsts.semut.utilities.CheckService;
+import android.Manifest;
 
 public class SplashScreenActivity extends AppCompatActivity {
 
@@ -38,13 +50,10 @@ public class SplashScreenActivity extends AppCompatActivity {
 
             if(CheckService.isInternetAvailable(context)) {
                 if (CheckService.isGpsEnabled(this)) {
-                    PermissionHelper permissionHelper = new PermissionHelper(this);
-                    if (permissionHelper.requestFineLocation()) {
-                        Intent intent = new Intent(this, MainActivity.class);
-                        startActivity(intent);
-                        finish();
-                        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-                    }
+                    //
+                    checkPermission();
+
+                    //
                 } else CommonAlerts.gspIsDisable(this);
             }else CommonAlerts.internetIsDisabled(this);
 
@@ -56,23 +65,73 @@ public class SplashScreenActivity extends AppCompatActivity {
 
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case PermissionHelper.REQUEST_ACCESS_FINE_LOCATION:
-                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Log.i(this.getClass().getSimpleName(), "Location granted");
-                    Intent intent = new Intent(this, MainActivity.class);
+
+
+    private void checkPermission(){
+        Dexter.withActivity(this)
+                .withPermissions(
+                        Manifest.permission.ACCESS_FINE_LOCATION,
+                        Manifest.permission.WAKE_LOCK,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                        Manifest.permission.ACCESS_COARSE_LOCATION,
+                        Manifest.permission.ACCESS_WIFI_STATE,
+                        Manifest.permission.ACCESS_NETWORK_STATE,
+                        Manifest.permission.CALL_PHONE,
+                        Manifest.permission.ACCESS_WIFI_STATE
+                ).withListener(new MultiplePermissionsListener() {
+            @Override public void onPermissionsChecked(MultiplePermissionsReport report) {
+                for (PermissionGrantedResponse response : report.getGrantedPermissionResponses()) {
+                    Log.i("PERMISSION", "Good Job, all permission granted");
+                    Intent intent = new Intent(SplashScreenActivity.this, MainActivity.class);
                     startActivity(intent);
                     finish();
                     overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-                } else {
-                    Log.i(this.getClass().getSimpleName(), "Location Rejected");
-                    Toast.makeText(context, "Maaf, Anda harus memberi izin lokasi kepada aplikasi untuk melanjutkan", Toast.LENGTH_LONG).show();
                 }
-                break;
-        }
+
+                for (PermissionDeniedResponse response : report.getDeniedPermissionResponses()) {
+                    //Log.i("PERMISSION", "permission denied");
+                    new AlertDialog.Builder(SplashScreenActivity.this).setTitle("Persetujuan Dibutuhkan")
+                            .setMessage("Aplikasi ini membutuhkan fitur yang memerlukan persetujuan Anda")
+                            .setNegativeButton(android.R.string.cancel, (dialog, which) -> {
+                                dialog.dismiss();
+                                finish();
+
+                            })
+                            .setPositiveButton(android.R.string.ok, (dialog, which) -> {
+                                dialog.dismiss();
+                                checkPermission();
+
+                            })
+                            .setOnDismissListener(dialog -> finish())
+                            .show();
+                }
+            }
+            @Override public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {
+                showPermissionRationale(token);
+            }
+        }).check();
     }
+
+
+
+
+    public void showPermissionRationale(final PermissionToken token) {
+        new AlertDialog.Builder(this).setTitle("Persetujuan Dibutuhkan")
+                .setMessage("Aplikasi ini membutuhkan fitur yang memerlukan persetujuan Anda")
+                .setNegativeButton(android.R.string.cancel, (dialog, which) -> {
+                    dialog.dismiss();
+                    token.cancelPermissionRequest();
+                })
+                .setPositiveButton(android.R.string.ok, (dialog, which) -> {
+                    dialog.dismiss();
+                    token.continuePermissionRequest();
+                })
+                .setOnDismissListener(dialog -> token.cancelPermissionRequest())
+                .show();
+    }
+
+
+
 
     @Override
     public void onBackPressed() {

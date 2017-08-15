@@ -14,7 +14,6 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
-import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
@@ -36,7 +35,6 @@ import java.io.UnsupportedEncodingException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import co.ceryle.radiorealbutton.library.RadioRealButtonGroup;
 import project.bsts.semut.adapters.TrackerAdapter;
 import project.bsts.semut.connections.broker.BrokerCallback;
 import project.bsts.semut.connections.broker.Config;
@@ -115,15 +113,7 @@ public class TrackerActivity extends AppCompatActivity implements BrokerCallback
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         mSwitchTrack = (Switch)findViewById(R.id.switch_track);
         toolbar.setTitleTextColor(getResources().getColor(R.color.lynchLight));
-        intent = getIntent();
-        ROUTING_KEY = intent.getStringExtra(Constants.INTENT_TRACKER_TYPE);
-        if(ROUTING_KEY.equals(Constants.MQ_ROUTES_BROADCAST_TRACKER_ANGKOT)) {
-            toolbar.setTitle("Angkot");
-            mMarkerDrawable = getResources().getDrawable(R.drawable.tracker_angkot);
-        } else {
-            toolbar.setTitle("Bus");
-            mMarkerDrawable = getResources().getDrawable(R.drawable.tracker_bus);
-        }
+        ROUTING_KEY = Constants.MQ_BROADCAST_ROUTING_KEY;
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ButterKnife.bind(this);
@@ -220,7 +210,7 @@ public class TrackerActivity extends AppCompatActivity implements BrokerCallback
     private void consume(){
 
         mqConsumer.setQueueName("");
-        mqConsumer.setExchange(Constants.MQ_EXCHANGE_NAME_MULTIPLE_BROADCAST);
+        mqConsumer.setExchange(Constants.MQ_EXCHANGE_NAME_ANGKOT);
         mqConsumer.setRoutingkey(ROUTING_KEY);
         mqConsumer.subsribe();
         mqConsumer.setMessageListner(delivery -> {
@@ -234,7 +224,7 @@ public class TrackerActivity extends AppCompatActivity implements BrokerCallback
                     isMessageReceived = true;
                     mProgressDialog.dismiss();
                 }
-                getMessage(message);
+               // getMessage(message);
 
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
