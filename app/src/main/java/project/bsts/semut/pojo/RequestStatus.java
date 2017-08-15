@@ -11,6 +11,17 @@ public class RequestStatus {
     @SerializedName("message")
     @Expose
     private String message;
+    @SerializedName("code")
+    @Expose
+    private String code;
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
 
     public Boolean getSuccess() {
         return success;

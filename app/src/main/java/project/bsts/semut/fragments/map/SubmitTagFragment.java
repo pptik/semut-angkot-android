@@ -2,6 +2,7 @@ package project.bsts.semut.fragments.map;
 
 import android.app.FragmentManager;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.text.Editable;
@@ -44,6 +45,11 @@ public class SubmitTagFragment extends Fragment implements TextWatcher, IConnect
     private int subPostID;
     Date currentDate;
     private ProgressDialog dialog;
+    private Context context;
+
+    public void setContext(Context context){
+        this.context = context;
+    }
 
 
 
@@ -92,7 +98,7 @@ public class SubmitTagFragment extends Fragment implements TextWatcher, IConnect
         else {
             dialog.show();
             RequestRest requestRest = new RequestRest(getActivity(), this);
-            //requestRest.insertPost(getPostID(), getSubPostID(), remarks.getText().toString());
+            requestRest.insertLaporanAngkot(remarks.getText().toString());
         }
 
     }
@@ -119,16 +125,22 @@ public class SubmitTagFragment extends Fragment implements TextWatcher, IConnect
     public void onSuccessRequest(String pResult, String type) {
         dialog.dismiss();
         switch (type){
-            case Constants.REST_INSERT_POST:
+            case Constants.REST_INSERT_ANGKOT_POST:
                 RequestStatus requestStatus = new Gson().fromJson(pResult, RequestStatus.class);
                 if(requestStatus.getSuccess()) {
                     Toast.makeText(getActivity(), "Berhasil mengirimkan laporan. Laporan Anda akan tampil dalam beberapa menit", Toast.LENGTH_LONG).show();
                     getActivity().finish();
                 }
-                else CommonAlerts.commonError(getActivity(), requestStatus.getMessage());
+                else {
+                    if(requestStatus.getCode().equals("009")){
+                        CommonAlerts.errorSession(context, requestStatus.getMessage());
+                    }
+                    CommonAlerts.commonError(context, requestStatus.getMessage());
+                }
+
                 break;
             case Constants.REST_ERROR:
-                CommonAlerts.commonError(getActivity(), Constants.MESSAGE_HTTP_ERROR);
+                CommonAlerts.commonError(context, Constants.MESSAGE_HTTP_ERROR);
                 break;
         }
     }

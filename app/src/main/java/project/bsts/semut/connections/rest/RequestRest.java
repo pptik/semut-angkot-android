@@ -15,6 +15,7 @@ import org.json.JSONObject;
 import project.bsts.semut.R;
 import project.bsts.semut.helper.PreferenceManager;
 import project.bsts.semut.helper.TagsType;
+import project.bsts.semut.pojo.Profile;
 import project.bsts.semut.pojo.Session;
 import project.bsts.semut.setup.Constants;
 import project.bsts.semut.utilities.GetCurrentDate;
@@ -115,6 +116,50 @@ public class RequestRest extends ConnectionHandler {
 
         }, mClient);
     }
+
+    public void insertLaporanAngkot(String detail){
+        preferenceManager = new PreferenceManager(mContext);
+        Profile profile = new Gson().fromJson(preferenceManager.getString(Constants.PREF_PROFILE), Profile.class);
+        String session = profile.getSessionID();
+        float latitude = preferenceManager.getFloat(Constants.ENTITY_LATITUDE, 0.0F);
+        float longitude = preferenceManager.getFloat(Constants.ENTITY_LONGITUDE, 0.0F);
+        RequestParams params = new RequestParams();
+        params.put("detail", detail);
+        params.put("session_id", session);
+        params.put("tanggal", GetCurrentDate.now());
+        params.put("latitude", latitude);
+        params.put("longitude", longitude);
+        Log.i(TAG, params.toString()+" -> "+Constants.REST_INSERT_ANGKOT_POST);
+        post(Constants.REST_INSERT_ANGKOT_POST, params, new JsonHttpResponseHandler() {
+            @Override
+            public void onStart() {
+                super.onStart();
+                Log.i(TAG, "Sending request");
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                super.onSuccess(statusCode, headers, response);
+                Log.i(TAG, "Success");
+                responseHandler.onSuccessRequest(response.toString(), Constants.REST_INSERT_ANGKOT_POST);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable e, JSONObject errorResponse) {
+                super.onFailure(statusCode, headers, e, errorResponse);
+                Log.e(TAG, "Failed");
+                responseHandler.onSuccessRequest(String.valueOf(statusCode), Constants.REST_ERROR);
+            }
+
+            @Override
+            public void onFinish() {
+                super.onFinish();
+                Log.i(TAG, "Disconnected");
+            }
+
+        }, mClient);
+    }
+
 
     public void insertPost(int id, int subID, String desc){
         preferenceManager = new PreferenceManager(mContext);

@@ -102,7 +102,7 @@ public class GetLocation extends Service implements BrokerCallback {
         this.intent = i;
         isWithStroring = intent.getBooleanExtra(Constants.INTENT_LOCATION_WITH_STORING, true);
         broadCastMessage(Constants.BROADCAST_MY_LOCATION, JSONRequest.myLocation(latService, lngService));
-        if(isWithStroring) startCollectingMap();
+       // if(isWithStroring) startCollectingMap();
         Log.i("SHIT", String.valueOf(isWithStroring));
 
         final Runnable r = new Runnable() {

@@ -9,7 +9,10 @@ import android.provider.Settings;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
+import project.bsts.semut.LoginActivity;
 import project.bsts.semut.R;
+import project.bsts.semut.helper.PreferenceManager;
+import project.bsts.semut.setup.Constants;
 
 public class CommonAlerts {
 
@@ -29,8 +32,30 @@ public class CommonAlerts {
                     ((Activity)context).finish();
                 })
                 .build();
+        alert.show();
+    }
 
 
+    public static void errorSession(Context context, String msg){
+        FancyAlertDialog.Builder alert = new FancyAlertDialog.Builder(context)
+                .setImageDrawable(new IconicsDrawable(context)
+                        .icon(GoogleMaterial.Icon.gmd_hourglass_empty)
+                        .sizeDp(100)
+                        .color(context.getResources().getColor(R.color.cochineal_red)))
+                .setTextTitle("Gagal memuat permintaan")
+                .setTextSubTitle("Sesi Anda telah berakhir, silahkan login kembali untuk menggunakan aplikasi")
+                .setBody(msg)
+                .setAutoHide(false)
+                .setPositiveButtonText("OK")
+                .setPositiveColor(R.color.primary_dark)
+                .setOnPositiveClicked((view, dialog) -> {
+                    PreferenceManager preferenceManager = new PreferenceManager(context);
+                    preferenceManager.save(true, Constants.IS_LOGGED_IN);
+                    preferenceManager.apply();
+                    context.startActivity(new Intent(context, LoginActivity.class));
+                    ((Activity)context).finish();
+                })
+                .build();
         alert.show();
     }
 
