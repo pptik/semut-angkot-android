@@ -35,6 +35,7 @@ public class SplashScreenActivity extends AppCompatActivity {
 
     private static final int SPLASH_TIME = 2 * 1000;// 3 * 1000
     private Context context;
+    boolean isApprove;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +69,7 @@ public class SplashScreenActivity extends AppCompatActivity {
 
 
     private void checkPermission(){
+        isApprove = false;
         Dexter.withActivity(this)
                 .withPermissions(
                         Manifest.permission.ACCESS_FINE_LOCATION,
@@ -81,15 +83,14 @@ public class SplashScreenActivity extends AppCompatActivity {
                 ).withListener(new MultiplePermissionsListener() {
             @Override public void onPermissionsChecked(MultiplePermissionsReport report) {
                 for (PermissionGrantedResponse response : report.getGrantedPermissionResponses()) {
+                    isApprove = true;
                     Log.i("PERMISSION", "Good Job, all permission granted");
-                    Intent intent = new Intent(SplashScreenActivity.this, MainActivity.class);
-                    startActivity(intent);
-                    finish();
-                    overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+
                 }
 
                 for (PermissionDeniedResponse response : report.getDeniedPermissionResponses()) {
                     //Log.i("PERMISSION", "permission denied");
+                    isApprove = false;
                     new AlertDialog.Builder(SplashScreenActivity.this).setTitle("Persetujuan Dibutuhkan")
                             .setMessage("Aplikasi ini membutuhkan fitur yang memerlukan persetujuan Anda")
                             .setNegativeButton(android.R.string.cancel, (dialog, which) -> {
@@ -104,6 +105,13 @@ public class SplashScreenActivity extends AppCompatActivity {
                             })
                             .setOnDismissListener(dialog -> finish())
                             .show();
+                }
+
+                if(isApprove){
+                    Intent intent = new Intent(SplashScreenActivity.this, MainActivity.class);
+                    startActivity(intent);
+                    finish();
+                    overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                 }
             }
             @Override public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {

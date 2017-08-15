@@ -33,6 +33,7 @@ import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Marker;
 
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -47,6 +48,7 @@ import project.bsts.semut.map.MarkerBearing;
 import project.bsts.semut.map.osm.MarkerClick;
 import project.bsts.semut.map.osm.OSMarkerAnimation;
 import project.bsts.semut.map.osm.OsmMarker;
+import project.bsts.semut.pojo.angkot.Angkot;
 import project.bsts.semut.pojo.mapview.MyLocation;
 import project.bsts.semut.pojo.mapview.Tracker;
 import project.bsts.semut.services.GetLocation;
@@ -82,9 +84,8 @@ public class TrackerActivity extends AppCompatActivity implements BrokerCallback
     private boolean isConnected = true, isMessageReceived = false;
     private ProgressDialog mProgressDialog;
     private IMapController mapController;
-    private Tracker[] trackers;
-    private String[] trackerMacs;
     private Marker[] markers;
+    private Angkot[] angkots;
     private boolean isFirsInit = true, isTracked = true;
     private TrackerAdapter adapter;
     private int checkedState = -1;
@@ -203,7 +204,7 @@ public class TrackerActivity extends AppCompatActivity implements BrokerCallback
 
     private void setListView() {
 
-        adapter = new TrackerAdapter(context, trackers, checkedState, sortLayout, this);
+        adapter = new TrackerAdapter(context, angkots, checkedState, sortLayout, this);
         listView.setAdapter(adapter);
     }
 
@@ -231,6 +232,7 @@ public class TrackerActivity extends AppCompatActivity implements BrokerCallback
                     mProgressDialog.dismiss();
                 }
                // getMessage(message);
+                populateMsg(message);
 
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
@@ -239,7 +241,38 @@ public class TrackerActivity extends AppCompatActivity implements BrokerCallback
         });
 
     }
+    private void populateMsg(String msg){
+        try {
+            JSONObject mainObject = new JSONObject(msg);
+            JSONArray angkotArray = mainObject.getJSONArray("angkot");
+            JSONArray laporanArray = mainObject.getJSONArray("laporan");
+            if(isFirsInit){
+                isFirsInit = false;
+                angkots = new Angkot[angkotArray.length()];
+                markers = new Marker[angkotArray.length()];
+                for (int i = 0; i < angkotArray.length(); i++) {
+                    angkots[i] = new Gson().fromJson(angkotArray.get(i).toString(), Angkot.class);
+                    markers[i] = new Marker(mapset);
+                    markers[i].setPosition(new GeoPoint(angkots[i].getAngkot().getLocation().getCoordinates().get(1),
+                            angkots[i].getAngkot().getLocation().getCoordinates().get(0)));
+                    markers[i].setIcon(getResources().getDrawable(R.drawable.tracker_angkot));
+                    markers[i].setRelatedObject(angkots[i]);
+                    markers[i].setOnMarkerClickListener(this);
+                    mapset.getOverlays().add(markers[i]);
+                    mapset.invalidate();
+                }
 
+                setListView();
+            }else {
+
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    /*
     private void getMessage(String msg){
         try {
             JSONObject object = new JSONObject(msg);
@@ -304,6 +337,7 @@ public class TrackerActivity extends AppCompatActivity implements BrokerCallback
             e.printStackTrace();
         }
     }
+    */
 
     private void animateToSelected(){
         if(checkedState == -1) mapController.animateTo(markerMyLocation.getPosition());
