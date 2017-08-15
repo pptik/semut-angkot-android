@@ -134,8 +134,8 @@ public class SubmitTagFragment extends Fragment implements TextWatcher, IConnect
                 else {
                     if(requestStatus.getCode().equals("009")){
                         CommonAlerts.errorSession(context, requestStatus.getMessage());
-                    }
-                    CommonAlerts.commonError(context, requestStatus.getMessage());
+                    }else
+                        CommonAlerts.commonError(context, requestStatus.getMessage());
                 }
 
                 break;

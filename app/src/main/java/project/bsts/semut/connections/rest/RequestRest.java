@@ -40,7 +40,7 @@ public class RequestRest extends ConnectionHandler {
     }
 
 
-    public void login(String uniqueParam, String pass, int loginType){
+    public void login(String uniqueParam, String pass){
         RequestParams params = new RequestParams();
         params.put("entity", uniqueParam);
         params.put("password", pass);

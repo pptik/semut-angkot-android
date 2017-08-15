@@ -52,12 +52,6 @@ public class LoginActivity extends AppCompatActivity implements FacebookCallback
     Button signupBtn;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @BindView(R.id.radio_group_login_type)
-    RadioRealButtonGroup mLoginTypeGroup;
-    @BindView(R.id.radio_email)
-    RadioRealButton mRadioEmail;
-    @BindView(R.id.radio_phone)
-    RadioRealButton mRadioPhone;
     @BindView(R.id.textInputEmail)
     TextInputLayout textInputLayout;
 
@@ -95,16 +89,6 @@ public class LoginActivity extends AppCompatActivity implements FacebookCallback
         });
 
         signupBtn.setOnClickListener(v -> startActivity(new Intent(context, SignupActivity.class)));
-        mLoginTypeGroup.setOnClickedButtonPosition(position -> {
-            loginType = position;
-            if(loginType == 0){
-                textInputLayout.setHint("Email");
-                emailEditText.setText("");
-            }else {
-                textInputLayout.setHint("Nomor Telepon");
-                emailEditText.setText("");
-            }
-        });
     }
 
     @Override
@@ -116,7 +100,7 @@ public class LoginActivity extends AppCompatActivity implements FacebookCallback
 
     private void doLogin(String email, String password){
         rest = new RequestRest(context, this);
-        rest.login(email, password, loginType);
+        rest.login(email, password);
         loadingIndicator.show();
     }
 

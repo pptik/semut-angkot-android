@@ -1,6 +1,8 @@
 package project.bsts.semut;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -9,13 +11,16 @@ import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.IntentCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
@@ -46,6 +51,7 @@ import project.bsts.semut.connections.broker.Consumer;
 import project.bsts.semut.connections.broker.Factory;
 import project.bsts.semut.helper.BroadcastManager;
 import project.bsts.semut.helper.PermissionHelper;
+import project.bsts.semut.helper.PreferenceManager;
 import project.bsts.semut.map.MarkerBearing;
 import project.bsts.semut.map.osm.MarkerClick;
 import project.bsts.semut.map.osm.OSMarkerAnimation;
@@ -78,6 +84,8 @@ public class TrackerActivity extends AppCompatActivity implements BrokerCallback
     RadioButton mRadioMyLocation;
     @BindView(R.id.add_post)
     Button mAddPost;
+    @BindView(R.id.more)
+    ImageView mMore;
 
 
     private Switch mSwitchTrack;
@@ -120,14 +128,21 @@ public class TrackerActivity extends AppCompatActivity implements BrokerCallback
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
 
         StrictMode.setThreadPolicy(policy);
-
+        ButterKnife.bind(this);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         mSwitchTrack = (Switch)findViewById(R.id.switch_track);
         toolbar.setTitleTextColor(getResources().getColor(R.color.lynchLight));
         ROUTING_KEY = Constants.MQ_BROADCAST_ROUTING_KEY;
+        toolbar.setTitle("");
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+      /*  getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeAsUpIndicator(CustomDrawable.create(
+                this, GoogleMaterial.Icon.gmd_more_horiz, 24, R.color.white)); */
         ButterKnife.bind(this);
+        mMore.setImageDrawable(CustomDrawable.create(
+                this, GoogleMaterial.Icon.gmd_more_horiz, 24, R.color.white));
+        mMore.setOnClickListener(v -> showPopup(v));
+
 
 
         mRadioMyLocation.setOnCheckedChangeListener((compoundButton, b) -> {
@@ -397,11 +412,34 @@ public class TrackerActivity extends AppCompatActivity implements BrokerCallback
         return false;
     }
 
+    private void showPopup(View v){
+        PopupMenu popup = new PopupMenu(context, v);
+        popup.inflate(R.menu.menu_main);
+        popup.setOnMenuItemClickListener(item1 -> {
+            switch (item1.getItemId()) {
+                case R.id.logout:
+                    PreferenceManager preferenceManager = new PreferenceManager(context);
+                    preferenceManager.save(false, Constants.IS_LOGGED_IN);
+                    preferenceManager.apply();
+                    Intent intent = new Intent(context, LoginActivity.class);
+                  //  intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    ComponentName cn = intent.getComponent();
+                    Intent mainIntent = IntentCompat.makeRestartActivityTask(cn);
+                    context.startActivity(mainIntent);
+                    finish();
+                    break;
+            }
+            return false;
+        });
+        //displaying the popup
+        popup.show();
+    }
+
     @Override
     public boolean onOptionsItemSelected(final MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
-            finish();
+
         }
 
         return super.onOptionsItemSelected(item);

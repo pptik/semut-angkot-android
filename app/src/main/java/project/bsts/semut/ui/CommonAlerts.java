@@ -50,7 +50,7 @@ public class CommonAlerts {
                 .setPositiveColor(R.color.primary_dark)
                 .setOnPositiveClicked((view, dialog) -> {
                     PreferenceManager preferenceManager = new PreferenceManager(context);
-                    preferenceManager.save(true, Constants.IS_LOGGED_IN);
+                    preferenceManager.save(false, Constants.IS_LOGGED_IN);
                     preferenceManager.apply();
                     context.startActivity(new Intent(context, LoginActivity.class));
                     ((Activity)context).finish();
