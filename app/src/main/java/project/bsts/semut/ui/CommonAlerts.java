@@ -2,9 +2,11 @@ package project.bsts.semut.ui;
 
 
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.provider.Settings;
+import android.support.v4.content.IntentCompat;
 
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
@@ -49,11 +51,21 @@ public class CommonAlerts {
                 .setPositiveButtonText("OK")
                 .setPositiveColor(R.color.primary_dark)
                 .setOnPositiveClicked((view, dialog) -> {
-                    PreferenceManager preferenceManager = new PreferenceManager(context);
+                  /*  PreferenceManager preferenceManager = new PreferenceManager(context);
                     preferenceManager.save(false, Constants.IS_LOGGED_IN);
                     preferenceManager.apply();
                     context.startActivity(new Intent(context, LoginActivity.class));
-                    ((Activity)context).finish();
+                    ((Activity)context).finish(); */
+
+
+                    PreferenceManager preferenceManager = new PreferenceManager(context);
+                    preferenceManager.save(false, Constants.IS_LOGGED_IN);
+                    preferenceManager.apply();
+                    Intent intent = new Intent(context, LoginActivity.class);
+                    //  intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    ComponentName cn = intent.getComponent();
+                    Intent mainIntent = IntentCompat.makeRestartActivityTask(cn);
+                    context.startActivity(mainIntent);
                 })
                 .build();
         alert.show();

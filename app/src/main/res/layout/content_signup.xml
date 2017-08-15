@@ -8,6 +8,7 @@
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="project.bsts.semut.SignupActivity"
+
     tools:showIn="@layout/activity_signup">
     <ScrollView
 
@@ -65,49 +66,6 @@
                     android:layout_marginRight="15dp"
                     android:background="@color/colorPrimaryDark"
                     />
-                <TextView
-                    android:padding="10dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:text="Daftar menggunakan :"
-                    />
-                <co.ceryle.radiorealbutton.library.RadioRealButtonGroup
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/radio_group_login_type"
-                    app:rrbg_bottomLineSize="0dp"
-                    app:rrbg_dividerColor="@color/colorPrimaryDark"
-                    app:rrbg_dividerSize="1dp"
-                    app:rrbg_selectorColor="@color/colorAccent"
-                    app:rrbg_selectorSize="3dp"
-                    app:rrbg_radius="0dp"
-                    app:rrbg_selectorTop="true"
-                    app:rrbg_selectorBottom="true"
-                    app:rrbg_shadow="false"
-                    app:rrbg_shadowElevation="2dp"
-                    app:rrbg_shadowMargin="3dp"
-                    app:rrbg_animateTexts_enter="overshoot"
-                    app:rrbg_animateImages_enter="overshoot">
-                    <co.ceryle.radiorealbutton.library.RadioRealButton
-                        android:layout_width="wrap_content"
-                        android:id="@+id/radio_email"
-                        android:layout_height="wrap_content"
-                        app:rrb_backgroundColor="@color/cardview_light_background"
-                        app:rrb_ripple="true"
-                        app:rrb_rippleColor="@color/colorPrimaryDark"
-                        app:rrb_text="Email"
-                        app:rrb_textColor="@color/colorPrimaryDark"/>
-                    <co.ceryle.radiorealbutton.library.RadioRealButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/radio_phone"
-                        app:rrb_ripple="true"
-                        app:rrb_backgroundColor="@color/cardview_light_background"
-                        app:rrb_rippleColor="@color/colorPrimaryDark"
-                        app:rrb_text="Phone"
-                        app:rrb_textColor="@color/colorPrimaryDark"/>
-                </co.ceryle.radiorealbutton.library.RadioRealButtonGroup>
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
                     android:id="@+id/input_email"
@@ -120,7 +78,7 @@
                         android:id="@+id/edit_email"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Email"
+                        android:hint="Email / Nomor Telepon"
                         android:textColor="@color/colorPrimaryDark"
                         android:background="#01ffffff"
                         android:inputType="text"
@@ -211,76 +169,6 @@
                     android:layout_marginRight="15dp"
                     android:background="@color/colorPrimaryDark"
                     />
-                <TextView
-                    android:layout_marginTop="5dp"
-                    android:layout_marginBottom="5dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Jenis Kelamin :"
-                    android:layout_gravity="center_horizontal"
-                    />
-
-                <co.ceryle.radiorealbutton.library.RadioRealButtonGroup
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/radio_group_gender"
-                    app:rrbg_bottomLineSize="0dp"
-                    app:rrbg_dividerColor="@color/colorPrimaryDark"
-                    app:rrbg_dividerSize="1dp"
-                    app:rrbg_selectorColor="@color/colorAccent"
-                    app:rrbg_selectorSize="3dp"
-                    app:rrbg_radius="0dp"
-                    app:rrbg_selectorTop="true"
-                    app:rrbg_shadow="false"
-                    app:rrbg_shadowElevation="2dp"
-                    app:rrbg_shadowMargin="3dp"
-                    app:rrbg_animateTexts_enter="overshoot"
-                    app:rrbg_animateImages_enter="overshoot">
-                    <co.ceryle.radiorealbutton.library.RadioRealButton
-                        android:layout_width="wrap_content"
-                        android:id="@+id/radio_male"
-                        android:layout_height="wrap_content"
-                        app:rrb_backgroundColor="@color/cardview_light_background"
-                        app:rrb_ripple="true"
-                        app:rrb_rippleColor="@color/colorPrimaryDark"
-                        app:rrb_text="Laki-Laki"
-                        app:rrb_textColor="@color/colorPrimaryDark"/>
-                    <co.ceryle.radiorealbutton.library.RadioRealButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/radio_female"
-                        app:rrb_ripple="true"
-                        app:rrb_backgroundColor="@color/cardview_light_background"
-                        app:rrb_rippleColor="@color/colorPrimaryDark"
-                        app:rrb_text="Perempuan"
-                        app:rrb_textColor="@color/colorPrimaryDark"/>
-                </co.ceryle.radiorealbutton.library.RadioRealButtonGroup>
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginLeft="15dp"
-                    android:layout_marginRight="15dp"
-                    android:background="@color/colorPrimaryDark"
-                    />
-                <android.support.design.widget.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:paddingTop="3dp"
-                    android:layout_height="wrap_content">
-                    <EditText
-                        android:padding="10dp"
-                        android:drawableLeft="@android:drawable/ic_secure"
-                        android:drawablePadding="5dp"
-                        android:id="@+id/edit_birthday"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="Tanggal Lahir"
-                        android:textColor="@color/colorPrimaryDark"
-                        android:background="#01ffffff"
-                        android:inputType="none"
-                        android:focusable="false"
-                        android:maxLines="1"
-                        android:singleLine="true" />
-                </android.support.design.widget.TextInputLayout>
             </LinearLayout>
             </android.support.v7.widget.CardView>
             <net.qiujuer.genius.ui.widget.Button
@@ -291,7 +179,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_accent_bold_round"
-                android:textColor="@color/colorPrimaryLight"
+                android:textColor="@color/white"
                 android:text="DAFTAR"
                 android:layout_margin="2dp"
                 app:gTouchColor="@color/colorSemiDarkPrimary"

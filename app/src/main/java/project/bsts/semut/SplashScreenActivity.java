@@ -108,7 +108,7 @@ public class SplashScreenActivity extends AppCompatActivity {
                 }
 
                 if(isApprove){
-                    Intent intent = new Intent(SplashScreenActivity.this, MainActivity.class);
+                    Intent intent = new Intent(SplashScreenActivity.this, TrackerActivity.class);
                     startActivity(intent);
                     finish();
                     overridePendingTransition(R.anim.fade_in, R.anim.fade_out);

@@ -76,16 +76,12 @@ public class RequestRest extends ConnectionHandler {
     }
 
 
-    public void register(String uniqueParam, String pass, int gender, String name, String username, String birthday, int loginType){
+    public void register(String uniqueParam, String pass, String name, String username){
         RequestParams params = new RequestParams();
-        if(loginType == 0) params.put("Email", uniqueParam);
-        else params.put("Phonenumber", uniqueParam);
-
-        params.put("Password", pass);
-        params.put("Birthday", birthday);
-        params.put("Name", name);
-        params.put("Username", username);
-        params.put("Gender", gender);
+        params.put("entity", uniqueParam);
+        params.put("password", pass);
+        params.put("name", name);
+        params.put("username", username);
         Log.i(TAG, params.toString());
         post(Constants.REST_USER_REGISTER, params, new JsonHttpResponseHandler() {
             @Override

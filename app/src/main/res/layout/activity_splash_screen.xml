@@ -3,21 +3,32 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:layout_gravity="center"
-    android:background="@color/colorPrimaryBold"
+    android:background="@color/colorPrimaryLight"
      >
 
     <ImageView
         android:padding="15dp"
         android:layout_centerInParent="true"
         android:id="@+id/image1"
+        android:layout_width="144dp"
+        android:layout_height="wrap_content"
+        android:src="@drawable/angkot_track"
+        android:adjustViewBounds="true"
+        />
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/banner"
+        android:layout_below="@id/image1"
+        android:text="SEMUT ANGKOT \n[BETA]"
+        android:gravity="center_horizontal"
+        android:textColor="@color/colorPrimaryDark"
+        android:layout_centerHorizontal="true"
+        android:textStyle="bold"
         />
 
     <TextView
         android:layout_width="fill_parent"
-        android:background="@color/colorPrimaryDark"
+        android:background="@color/white"
         android:padding="10dp"
         android:layout_height="wrap_content"
         android:gravity="center"

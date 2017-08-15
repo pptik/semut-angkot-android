@@ -28,7 +28,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:gFont="roboto.ttf"
-                app:gTouchColor="@color/colorWhiteDark"
+                app:gTouchColor="@color/colorPrimary"
                 app:gTouchEffect="ripple"
                 android:textColor="@color/white"
                 android:text="daftar"

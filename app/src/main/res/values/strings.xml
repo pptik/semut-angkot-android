@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Semut</string>
+    <string name="app_name">Semut Angkot</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_login">Login</string>
     <string name="app_id"></string>

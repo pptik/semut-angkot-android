@@ -30,13 +30,10 @@ import project.bsts.semut.utilities.FieldValidator;
 
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
-public class SignupActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener,
-        IConnectionResponseHandler{
+public class SignupActivity extends AppCompatActivity implements IConnectionResponseHandler{
 
     @BindView(R.id.edit_username)
     EditText mEditUsername;
-    @BindView(R.id.radio_group_login_type)
-    RadioRealButtonGroup mRadioGroupLoginType;
     @BindView(R.id.edit_email)
     EditText mEditEmail;
     @BindView(R.id.edit_password)
@@ -45,10 +42,6 @@ public class SignupActivity extends AppCompatActivity implements DatePickerDialo
     EditText mEditRepeatPassword;
     @BindView(R.id.edit_full_name)
     EditText mEditFullName;
-    @BindView(R.id.radio_group_gender)
-    RadioRealButtonGroup mRadouGroupGender;
-    @BindView(R.id.edit_birthday)
-    EditText mEditBirthday;
     @BindView(R.id.button_signup)
     Button mButtonSignup;
     @BindView(R.id.input_email)
@@ -76,13 +69,6 @@ public class SignupActivity extends AppCompatActivity implements DatePickerDialo
         dialog.setMessage("Memuat...");
 
         initIcon();
-        mRadioGroupLoginType.setOnClickedButtonPosition(position -> {
-            loginType = position;
-            mInputEmail.setHint((position == 0) ? "Email" : "Nomor Telepon");
-
-        });
-        mRadouGroupGender.setOnClickedButtonPosition(position -> genderType = position);
-        mEditBirthday.setOnClickListener(view -> showPicker());
         mButtonSignup.setOnClickListener(v -> validate());
     }
 
@@ -104,7 +90,6 @@ public class SignupActivity extends AppCompatActivity implements DatePickerDialo
         else {
             if (mEditPassword.getText().toString().equals("") ||
                     mEditRepeatPassword.getText().toString().equals("") ||
-                    mEditBirthday.getText().toString().equals("") ||
                     mEditUsername.getText().toString().equals("") ||
                     mEditFullName.getText().equals("")) {
                 Snackbar.make(mButtonSignup, "Kolom tidak kosong", Snackbar.LENGTH_LONG).show();
@@ -115,24 +100,12 @@ public class SignupActivity extends AppCompatActivity implements DatePickerDialo
                     dialog.show();
                     requestRest = new RequestRest(context, this);
                     requestRest.register(mEditEmail.getText().toString(), mEditPassword.getText().toString(),
-                            genderType, mEditFullName.getText().toString(), mEditUsername.getText().toString(),
-                            mEditBirthday.getText().toString(), loginType);
+                            mEditFullName.getText().toString(), mEditUsername.getText().toString());
                 }
             }
         }
     }
 
-    private void showPicker() {
-        Calendar now = Calendar.getInstance();
-        DatePickerDialog dpd = DatePickerDialog.newInstance(
-                SignupActivity.this,
-                now.get(Calendar.YEAR),
-                now.get(Calendar.MONTH),
-                now.get(Calendar.DAY_OF_MONTH)
-        );
-        dpd.setAccentColor(getResources().getColor(R.color.colorAccent));
-        dpd.show(getFragmentManager(), "Datepickerdialog");
-    }
 
     private void initIcon() {
         mEditUsername.setCompoundDrawables(CustomDrawable.create(context,
@@ -145,25 +118,11 @@ public class SignupActivity extends AppCompatActivity implements DatePickerDialo
                 GoogleMaterial.Icon.gmd_https, 24, R.color.primary_dark), null, null, null);
         mEditFullName.setCompoundDrawables(CustomDrawable.create(context,
                 GoogleMaterial.Icon.gmd_account_box, 24, R.color.primary_dark), null, null, null);
-        mEditBirthday.setCompoundDrawables(CustomDrawable.create(context,
-                GoogleMaterial.Icon.gmd_cake, 24, R.color.primary_dark), null, null, null);
     }
 
-    @Override
-    public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
-        String date = getZero(dayOfMonth)+"-"+getZero(monthOfYear+1)+"-"+year;
-        mEditBirthday.setText(date);
-    }
 
-    private String getZero(int num){
-        String strZero = "";
-        if(num < 10){
-            strZero = "0"+ String.valueOf(num);
-        }else {
-            strZero = String.valueOf(num);
-        }
-        return strZero;
-    }
+
+
 
     @Override
     public void onSuccessRequest(String pResult, String type) {
