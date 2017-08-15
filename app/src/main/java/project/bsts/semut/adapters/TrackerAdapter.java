@@ -84,7 +84,7 @@ public class TrackerAdapter extends BaseAdapter {
         SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         Date date = new Date(System.currentTimeMillis() - 3600 * 10);
         String dateNow = df.format(date);
-        String dateToCompare = angkots[i].getAngkot().getLastUpdate();
+        String dateToCompare = angkots[i].getAngkot().getLastUpdate().replace('-', '/');
         boolean isExpired = CompareDate.compare(dateToCompare, dateNow);
         if(isExpired) detail += " <br> <b><font color='red'>LOKASI TIDAK UPDATE</font></b>";
         else detail += " <br> <b><font color='blue'>LOKASI UPDATE</font></b>";

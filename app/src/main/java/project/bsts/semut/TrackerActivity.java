@@ -31,6 +31,7 @@ import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Marker;
+import org.osmdroid.views.overlay.Overlay;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -49,6 +50,7 @@ import project.bsts.semut.map.osm.MarkerClick;
 import project.bsts.semut.map.osm.OSMarkerAnimation;
 import project.bsts.semut.map.osm.OsmMarker;
 import project.bsts.semut.pojo.angkot.Angkot;
+import project.bsts.semut.pojo.angkot.AngkotPost;
 import project.bsts.semut.pojo.mapview.MyLocation;
 import project.bsts.semut.pojo.mapview.Tracker;
 import project.bsts.semut.services.GetLocation;
@@ -95,8 +97,7 @@ public class TrackerActivity extends AppCompatActivity implements BrokerCallback
     private final static int FAB_STATE_OPEN = 1;
     private final static int FAB_STATE_CLOSE = 0;
     private int fabState = FAB_STATE_CLOSE;
-    private Intent intent;
-    private Drawable mMarkerDrawable;
+    private AngkotPost[] angkotPosts;
     private String ROUTING_KEY;
     private Intent locService;
     private BroadcastManager broadcastManager;
@@ -231,7 +232,7 @@ public class TrackerActivity extends AppCompatActivity implements BrokerCallback
         try {
             JSONObject mainObject = new JSONObject(msg);
             JSONArray angkotArray = mainObject.getJSONArray("angkot");
-            JSONArray laporanArray = mainObject.getJSONArray("laporan");
+            JSONArray postArray = mainObject.getJSONArray("laporan");
             // angkot
             if(isFirsInit){
                 isFirsInit = false;
@@ -279,6 +280,30 @@ public class TrackerActivity extends AppCompatActivity implements BrokerCallback
                     }
                     if(listView.getVisibility() == View.GONE) setListView();
                     if(isTracked) animateToSelected();
+                    // post
+                    angkotPosts = new AngkotPost[postArray.length()];
+                    for(int i = 0; i < postArray.length(); i++){
+                        angkotPosts[i] = new Gson().fromJson(postArray.get(i).toString(), AngkotPost.class);
+                    }
+                    for(Overlay overlay : mapset.getOverlays()){
+                        if(overlay instanceof Marker){
+                            if(((Marker) overlay).getRelatedObject() instanceof  AngkotPost){
+                                mapset.getOverlays().remove(overlay);
+                                mapset.invalidate();
+                            }
+                        }
+                    }
+                    // add markers
+                    for(int i = 0; i < angkotPosts.length; i++){
+                        Marker marker = new Marker(mapset);
+                        marker.setPosition(new GeoPoint(angkotPosts[i].getLocation().getCoordinates().get(1),
+                                angkotPosts[i].getLocation().getCoordinates().get(0)));
+                        marker.setIcon(getResources().getDrawable(R.drawable.angkot_icon));
+                        marker.setRelatedObject(angkotPosts[i]);
+                        marker.setOnMarkerClickListener(this);
+                        mapset.getOverlays().add(marker);
+                        mapset.invalidate();
+                    }
                 }else {
                     // found new data
                     isFirsInit = true;
