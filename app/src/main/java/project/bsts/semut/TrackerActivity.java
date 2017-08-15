@@ -147,9 +147,9 @@ public class TrackerActivity extends AppCompatActivity implements BrokerCallback
         broadcastManager.subscribeToUi(this);
 
 
-       // locService = new Intent(context, GetLocation.class);
-       // locService.putExtra(Constants.INTENT_LOCATION_WITH_STORING, false);
-       // if (permissionHelper.requestFineLocation()) startService(locService);
+        locService = new Intent(context, GetLocation.class);
+        locService.putExtra(Constants.INTENT_LOCATION_WITH_STORING, false);
+        if (permissionHelper.requestFineLocation()) startService(locService);
 
         mProgressDialog = new ProgressDialog(context);
         markerClick = new MarkerClick(context, markerDetailLayout);
@@ -187,20 +187,6 @@ public class TrackerActivity extends AppCompatActivity implements BrokerCallback
         }
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case PermissionHelper.REQUEST_ACCESS_FINE_LOCATION:
-                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Log.i(TAG, "Location granted");
-                    startService(locService);
-                } else {
-                    Log.i(TAG, "Location Rejected");
-                    CommonAlerts.commonError(context, "Untuk melanjutkan menggunakan aplikasi, Anda harus mengizinkan aplikasi menggunakan lokasi Anda");
-                }
-                break;
-        }
-    }
 
     private void setListView() {
 
@@ -246,6 +232,7 @@ public class TrackerActivity extends AppCompatActivity implements BrokerCallback
             JSONObject mainObject = new JSONObject(msg);
             JSONArray angkotArray = mainObject.getJSONArray("angkot");
             JSONArray laporanArray = mainObject.getJSONArray("laporan");
+            // angkot
             if(isFirsInit){
                 isFirsInit = false;
                 angkots = new Angkot[angkotArray.length()];
@@ -261,83 +248,46 @@ public class TrackerActivity extends AppCompatActivity implements BrokerCallback
                     mapset.getOverlays().add(markers[i]);
                     mapset.invalidate();
                 }
-
                 setListView();
+                animateToSelected();
             }else {
-
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
-
-    /*
-    private void getMessage(String msg){
-        try {
-            JSONObject object = new JSONObject(msg);
-            JSONArray jsonArray = object.getJSONArray("data");
-            if(object.getBoolean("success")){
-                if(isFirsInit) {
-                    Log.i("test", "Init");
-                    trackers = new Tracker[jsonArray.length()];
-                    trackerMacs = new String[jsonArray.length()];
-                    isFirsInit = false;
-                    // add markers
-                    markers = new Marker[jsonArray.length()];
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        trackers[i] = new Gson().fromJson(jsonArray.get(i).toString(), Tracker.class);
-                        trackerMacs[i] = trackers[i].getMac();
-                        markers[i] = new Marker(mapset);
-                        markers[i].setPosition(new GeoPoint(trackers[i].getData().get(0), trackers[i].getData().get(1)));
-                        markers[i].setIcon(mMarkerDrawable);
-                        markers[i].setRelatedObject(trackers[i]);
-                        markers[i].setOnMarkerClickListener(this);
-                        mapset.getOverlays().add(markers[i]);
-                    }
-                    setListView();
-                    animateToSelected();
-                }else {
-                    if(jsonArray.length() == trackers.length){
-                        for(int i = 0; i < jsonArray.length(); i++){
-                            JSONObject entity = jsonArray.getJSONObject(i);
-                            if(trackers[i].getMac().equals(entity.getString("Mac"))){ // update markers
-                                trackers[i] = new Gson().fromJson(entity.toString(), Tracker.class);
-                                if(markers[i].getPosition().getLatitude() != trackers[i].getData().get(0) ||
-                                        markers[i].getPosition().getLongitude() != trackers[i].getData().get(1)) {
+                if (angkotArray.length() == angkots.length) {
+                    for (int i = 0; i < angkotArray.length(); i++) {
+                        JSONObject entity = null;
+                        try {
+                            entity = angkotArray.getJSONObject(i);
+                            Angkot angkot = new Gson().fromJson(entity.toString(), Angkot.class);
+                            if (angkots[i].getAngkot().getPlatNomor().equals(angkot.getAngkot().getPlatNomor())) { // update markers
+                                angkots[i] = new Gson().fromJson(entity.toString(), Angkot.class);
+                                if (markers[i].getPosition().getLatitude() != angkots[i].getAngkot().getLocation().getCoordinates().get(1) ||
+                                        markers[i].getPosition().getLongitude() != angkots[i].getAngkot().getLocation().getCoordinates().get(0)) {
                                     double bearing = MarkerBearing.bearing(markers[i].getPosition().getLatitude(), markers[i].getPosition().getLongitude(),
-                                            trackers[i].getData().get(0), trackers[i].getData().get(1));
-                                    markers[i].setRelatedObject(trackers[i]);
+                                            angkots[i].getAngkot().getLocation().getCoordinates().get(1), angkots[i].getAngkot().getLocation().getCoordinates().get(0));
+                                    markers[i].setRelatedObject(angkots[i]);
                                     markers[i].setRotation((float) bearing);
-
                                     markerAnimation.animate(mapset, markers[i],
-                                            new GeoPoint(trackers[i].getData().get(0), trackers[i].getData().get(1)),
+                                            new GeoPoint(angkots[i].getAngkot().getLocation().getCoordinates().get(1), angkots[i].getAngkot().getLocation().getCoordinates().get(0)),
                                             1500);
-                                    if(checkedState != -1) mapController.setZoom(19);
-                                }else {
+                                    if (checkedState != -1) mapController.setZoom(19);
+                                } else {
                                     // same position
                                 }
                             }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
-                        if(listView.getVisibility() == View.GONE) setListView();
-                        //updateListView();
-                        if(isTracked) animateToSelected();
-
-                    }else {
-                        // found new data
-                        isFirsInit = true;
                     }
+                    if(listView.getVisibility() == View.GONE) setListView();
+                    if(isTracked) animateToSelected();
+                }else {
+                    // found new data
+                    isFirsInit = true;
                 }
-            }else {
-                // success == false
-                CommonAlerts.commonError(context, "Terjadi kesalahan pada server, silahkan coba beberapa saat lagi");
             }
-
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
-    */
 
     private void animateToSelected(){
         if(checkedState == -1) mapController.animateTo(markerMyLocation.getPosition());

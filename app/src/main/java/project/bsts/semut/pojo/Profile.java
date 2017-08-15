@@ -55,6 +55,13 @@ public class Profile {
     @Expose
     private String sessionID;
 
+    public String getSessionID() {
+        return sessionID;
+    }
+
+    public void setSessionID(String sessionID) {
+        this.sessionID = sessionID;
+    }
 
 
     public int getID() {

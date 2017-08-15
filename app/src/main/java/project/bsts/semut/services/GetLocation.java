@@ -57,14 +57,15 @@ public class GetLocation extends Service implements BrokerCallback {
     private Consumer mqConsumer;
     private Producer mqProducer;
     private PreferenceManager preferenceManager;
-    Session session;
+    String session;
     Profile profile;
     private boolean isFirstInit = true, isMqConnectionError = false, isWithStroring = true;
     private Intent intent;
 
     @Override
     public IBinder onBind(Intent i) {
-
+        this.intent = i;
+        isWithStroring = intent.getBooleanExtra(Constants.INTENT_LOCATION_WITH_STORING, true);
         return null;
     }
 
@@ -74,10 +75,10 @@ public class GetLocation extends Service implements BrokerCallback {
 
         broadcastManager = new BroadcastManager(getApplicationContext());
         preferenceManager = new PreferenceManager(getApplicationContext());
-        session = new Gson().fromJson(preferenceManager.getString(Constants.PREF_SESSION_ID), Session.class);
         profile = new Gson().fromJson(preferenceManager.getString(Constants.PREF_PROFILE), Profile.class);
-        if(isWithStroring) connectToRabbit();
-        if(isWithStroring) consume();
+        session = profile.getSessionID();
+      //  if(isWithStroring) connectToRabbit();
+      //  if(isWithStroring) consume();
         handler = new Handler();
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         Location loc = LocationUtilities.getLastBestLocation(locationManager);
@@ -134,7 +135,7 @@ public class GetLocation extends Service implements BrokerCallback {
 
     private void consume(){
 
-        mqConsumer.setQueueName(profile.getID()+"-"+session.getSessionID());
+        mqConsumer.setQueueName(profile.getID()+"-"+session);
         mqConsumer.subsribe();
         mqConsumer.setMessageListner(delivery -> {
             try {
@@ -160,7 +161,7 @@ public class GetLocation extends Service implements BrokerCallback {
                 .type(Constants.MQ_INCOMING_TYPE_MAPVIEW)
                 .build();
         mqProducer.setRoutingkey(Constants.ROUTING_KEY_UPDATE_LOCATION);
-        String message = JSONRequest.storeLocation(session.getSessionID(), altService, NumUtils.round(latService, 7), NumUtils.round(lngService,7), spdService,
+        String message = JSONRequest.storeLocation(session, altService, NumUtils.round(latService, 7), NumUtils.round(lngService,7), spdService,
                 GetCurrentDate.now(), preferenceManager.getInt(Constants.MAP_RADIUS, 3) * 1000,
                 preferenceManager.getInt(Constants.MAP_LIMIT, 6), MapItem.get(getApplicationContext()), preferenceManager.getInt(Constants.IS_ONLINE, 0));
         Log.i(TAG, message);
