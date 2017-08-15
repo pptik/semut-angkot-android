@@ -160,8 +160,7 @@ public class TagsFragment extends Fragment implements View.OnClickListener {
             }
 
             SubmitTagFragment submit = new SubmitTagFragment();
-            submit.setPostID(this.parentID);
-            submit.setSubPostID(index);
+
 
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.setCustomAnimations(R.animator.come_from_right_fragment, R.animator.out_to_right_fragment, R.animator.come_from_right_fragment, R.animator.out_to_right_fragment);

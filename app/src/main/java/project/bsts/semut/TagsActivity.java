@@ -6,6 +6,7 @@ import android.app.FragmentTransaction;
 import android.os.Bundle;
 
 
+import project.bsts.semut.fragments.map.SubmitTagFragment;
 import project.bsts.semut.fragments.map.TagsFragment;
 
 
@@ -19,7 +20,9 @@ public class TagsActivity extends Activity {
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-        TagsFragment tagsFragment = new TagsFragment();
+        //TagsFragment tagsFragment = new TagsFragment();
+        //fragmentTransaction.replace(R.id.container, tagsFragment);
+        SubmitTagFragment tagsFragment = new SubmitTagFragment();
         fragmentTransaction.replace(R.id.container, tagsFragment);
 
         fragmentTransaction.commit();

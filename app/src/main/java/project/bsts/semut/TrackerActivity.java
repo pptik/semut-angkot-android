@@ -144,6 +144,7 @@ public class TrackerActivity extends AppCompatActivity implements BrokerCallback
         mAddPost.setCompoundDrawables(
                 CustomDrawable.create(context, GoogleMaterial.Icon.gmd_add, 24, R.color.primary_light), null, null, null
         );
+        mAddPost.setOnClickListener(v -> startActivity(new Intent(context, TagsActivity.class)));
 
         mSwitchTrack.setChecked(true);
         mSwitchTrack.setOnCheckedChangeListener((compoundButton, b) -> isTracked = b);

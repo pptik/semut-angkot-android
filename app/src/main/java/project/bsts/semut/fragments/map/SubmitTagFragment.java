@@ -38,7 +38,6 @@ public class SubmitTagFragment extends Fragment implements TextWatcher, IConnect
     private EditText remarks;
     private ImageView thumb;
     private ImageButton closeButton;
-    private ImageButton backButton;
     private Button submitButton;
 
     private int postID;
@@ -70,17 +69,15 @@ public class SubmitTagFragment extends Fragment implements TextWatcher, IConnect
         String formattedCurrentDate = format.format(currentDate);
         dateText.setText(formattedCurrentDate);
 
-        HashMap<String, String> info = getPostInfo();
-        titleText.setText(info.get("text"));
-        thumb.setImageResource(Integer.parseInt(info.get("res")));
 
-        backButton = (ImageButton) view.findViewById(R.id.backButton);
+        titleText.setText("Laporan Angkot");
+        thumb.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.angkot_icon));
+
         closeButton = (ImageButton) view.findViewById(R.id.closeButton);
 
 
 
         closeButton.setOnClickListener(v -> getActivity().finish());
-        backButton.setOnClickListener(v -> back());
         submitButton.setOnClickListener(v -> {
             submit();
         });
@@ -88,76 +85,19 @@ public class SubmitTagFragment extends Fragment implements TextWatcher, IConnect
         return view;
     }
 
-    public void back(){
-        FragmentManager fragmentManager = getFragmentManager();
-        fragmentManager.popBackStack();
-    }
 
-    private HashMap<String, String> getPostInfo(){
-        int[] childNums = {3, 2, 3, 2, 5, 4};
-        String[] texts = {"Normal", "Padat", "Macet Total", "Polisi Patroli", "Pemeriksaan Polisi", "Kecelakaan", "Kecelakaan dengan Korban Jiwa", "Mobil Mogok", "Pohon Tumbang", "Banjir", "Perbaikan Jalan Ringan", "Perbaikan Jalan Rusak", "Event", "Pembangunan", "Demonstrasi", "Tidak Ada Tanda", "Jalan Rusak", "Bus Berhenti", "Tempat Padat/Ramai", "BRT", "Angkot"};
-
-        int postID = 0;
-        for(int i=0; i<this.postID; i++){
-            postID += childNums[i];
-        }
-        postID += this.subPostID;
-
-        int resID = getResId("menu_post_sub_" + twoDigitString(postID+1));
-
-        HashMap<String, String> map = new HashMap();
-        map.put("res", ""+resID);
-        map.put("text", texts[postID]);
-        map.put("id", ""+(postID+1));
-
-        return map;
-    }
-
-    private String twoDigitString(int a){
-        if(a < 10) return "0"+a;
-
-        return "" + a;
-    }
-
-    private static int getResId(String resName) {
-        try {
-            Class res = R.drawable.class;
-            Field field = res.getField(resName);
-            int drawableId = field.getInt(null);
-
-            return drawableId;
-        }
-        catch (Exception e) {
-            return -1;
-        }
-    }
 
     private void submit() {
         if(remarks.getText().toString().equals("")) Toast.makeText(getActivity(), "Anda belum mengisi keterangan", Toast.LENGTH_LONG).show();
         else {
             dialog.show();
             RequestRest requestRest = new RequestRest(getActivity(), this);
-            requestRest.insertPost(getPostID(), getSubPostID(), remarks.getText().toString());
+            //requestRest.insertPost(getPostID(), getSubPostID(), remarks.getText().toString());
         }
 
     }
 
-    // setter dan getter
-    public int getPostID() {
-        return postID;
-    }
 
-    public void setPostID(int postID) {
-        this.postID = postID;
-    }
-
-    public int getSubPostID() {
-        return subPostID;
-    }
-
-    public void setSubPostID(int subPostID) {
-        this.subPostID = subPostID;
-    }
 
     // listener text
     @Override

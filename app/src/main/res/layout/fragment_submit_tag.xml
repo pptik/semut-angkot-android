@@ -1,23 +1,24 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     tools:context="project.bsts.semut.fragments.map.SubmitTagFragment"
     android:background="@drawable/bg_white_rounded">
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_gravity="center">
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp">
+            android:layout_height="wrap_content">
 
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="wrap_content"
+                android:padding="15dp"
                 android:text="Kirim Laporan"
                 android:id="@+id/textView2"
                 android:layout_gravity="center_horizontal"
@@ -27,17 +28,6 @@
                 android:textSize="20dp"
                 android:gravity="center|center_horizontal" />
 
-            <ImageButton
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:id="@+id/backButton"
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true"
-                android:src="@drawable/btn_back_menu"
-                android:layout_alignParentBottom="false"
-                android:layout_alignParentRight="false"
-                android:background="#00ffffff"
-                android:layout_alignParentLeft="true" />
 
             <ImageButton
                 android:layout_width="50dp"
@@ -54,7 +44,7 @@
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="fill_parent"
+            android:layout_height="wrap_content"
             android:gravity="top"
             android:paddingTop="10dp"
             android:paddingLeft="20dp"
@@ -67,11 +57,10 @@
                 android:layout_height="wrap_content">
 
                 <ImageView
+                    android:id="@+id/thumb"
                     android:layout_width="70dp"
                     android:layout_height="70dp"
-                    android:id="@+id/thumb"
-                    android:src="@drawable/menu_post_sub_01"
-                    android:background="@drawable/bg_orange_circle" />
+                    android:src="@drawable/menu_post_sub_01" />
 
                 <LinearLayout
                     android:orientation="vertical"
@@ -150,19 +139,22 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical|center_horizontal">
 
-                <Button
-                    android:layout_width="160dp"
-                    android:layout_height="40dp"
-                    android:text="Submit"
-                    android:id="@+id/submitButton"
-                    android:layout_marginTop="10dp"
-                    android:background="@drawable/solid_rounded_blue"
-                    android:textColor="@color/white"
-                    android:elegantTextHeight="false" />
+
             </LinearLayout>
 
         </LinearLayout>
-
+        <Button
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            android:text="Submit"
+            android:id="@+id/submitButton"
+            android:layout_marginTop="10dp"
+            android:padding="15dp"
+            android:layout_margin="10dp"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/solid_rounded_blue"
+            android:textColor="@color/white"
+            android:elegantTextHeight="false" />
     </LinearLayout>
 
 </FrameLayout>
