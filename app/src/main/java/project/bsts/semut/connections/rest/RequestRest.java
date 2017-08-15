@@ -42,7 +42,7 @@ public class RequestRest extends ConnectionHandler {
     public void login(String uniqueParam, String pass, int loginType){
         RequestParams params = new RequestParams();
         params.put("entity", uniqueParam);
-        params.put("Password", pass);
+        params.put("password", pass);
         Log.i(TAG, params.toString());
         post(Constants.REST_USER_LOGIN, params, new JsonHttpResponseHandler() {
             @Override

@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -110,6 +111,11 @@ public class TrackerActivity extends AppCompatActivity implements BrokerCallback
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tracker);
+
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+
+        StrictMode.setThreadPolicy(policy);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         mSwitchTrack = (Switch)findViewById(R.id.switch_track);
         toolbar.setTitleTextColor(getResources().getColor(R.color.lynchLight));
@@ -140,9 +146,9 @@ public class TrackerActivity extends AppCompatActivity implements BrokerCallback
         broadcastManager.subscribeToUi(this);
 
 
-        locService = new Intent(context, GetLocation.class);
-        locService.putExtra(Constants.INTENT_LOCATION_WITH_STORING, false);
-        if (permissionHelper.requestFineLocation()) startService(locService);
+       // locService = new Intent(context, GetLocation.class);
+       // locService.putExtra(Constants.INTENT_LOCATION_WITH_STORING, false);
+       // if (permissionHelper.requestFineLocation()) startService(locService);
 
         mProgressDialog = new ProgressDialog(context);
         markerClick = new MarkerClick(context, markerDetailLayout);

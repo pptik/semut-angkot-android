@@ -152,9 +152,8 @@ public class LoginActivity extends AppCompatActivity implements FacebookCallback
     }
 
 
-    private void populateUserData(String profile, String sessionID){
+    private void populateUserData(String profile){
         preferenceManager.save(profile, Constants.PREF_PROFILE);
-        preferenceManager.save("{SessionID:"+sessionID+"}", Constants.PREF_SESSION_ID);
         preferenceManager.save(true, Constants.IS_LOGGED_IN);
         preferenceManager.apply();
         toDashBoard();
@@ -177,7 +176,7 @@ public class LoginActivity extends AppCompatActivity implements FacebookCallback
                 try {
                     JSONObject object = new JSONObject(pResult);
                     boolean success = (object.getBoolean("success"));
-                    if(success) populateUserData(object.getJSONObject("Profile").toString(), object.getString("SessionID"));
+                    if(success) populateUserData(object.getJSONObject("profile").toString());
                     else new ShowSnackbar(loginBtn).show(object.getString("message"));
                 } catch (JSONException e) {
                     e.printStackTrace();

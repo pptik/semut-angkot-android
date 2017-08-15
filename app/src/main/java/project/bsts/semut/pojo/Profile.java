@@ -51,6 +51,11 @@ public class Profile {
     @SerializedName("deposit")
     @Expose
     private Object deposit;
+    @SerializedName("SessionID")
+    @Expose
+    private String sessionID;
+
+
 
     public int getID() {
         return iD;
