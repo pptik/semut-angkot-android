@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
@@ -75,6 +76,8 @@ public class TrackerActivity extends AppCompatActivity implements BrokerCallback
     RelativeLayout markerDetailLayout;
     @BindView(R.id.myLocRadio)
     RadioButton mRadioMyLocation;
+    @BindView(R.id.add_post)
+    Button mAddPost;
 
 
     private Switch mSwitchTrack;
@@ -137,11 +140,13 @@ public class TrackerActivity extends AppCompatActivity implements BrokerCallback
         });
 
 
+        context = this;
+        mAddPost.setCompoundDrawables(
+                CustomDrawable.create(context, GoogleMaterial.Icon.gmd_add, 24, R.color.primary_light), null, null, null
+        );
 
         mSwitchTrack.setChecked(true);
         mSwitchTrack.setOnCheckedChangeListener((compoundButton, b) -> isTracked = b);
-
-        context = this;
 
         PermissionHelper permissionHelper = new PermissionHelper(context);
         broadcastManager = new BroadcastManager(context);
@@ -179,12 +184,14 @@ public class TrackerActivity extends AppCompatActivity implements BrokerCallback
             if(sortLayout.getVisibility() == View.GONE) sortLayout.setVisibility(View.VISIBLE);
             fabState = FAB_STATE_OPEN;
             sortFab.setImageDrawable(CustomDrawable.create(context, GoogleMaterial.Icon.gmd_close, 24, R.color.primary_light));
+            mAddPost.setVisibility(View.GONE);
          //   setListView();
         }else {
             if(sortLayout.getVisibility() == View.VISIBLE) sortLayout.setVisibility(View.GONE);
             if(markerDetailLayout.getVisibility() == View.VISIBLE) markerDetailLayout.startAnimation(slideDown);
             fabState = FAB_STATE_CLOSE;
             sortFab.setImageDrawable(CustomDrawable.create(context, GoogleMaterial.Icon.gmd_sort, 24, R.color.primary_light));
+            mAddPost.setVisibility(View.VISIBLE);
         }
     }
 
@@ -385,6 +392,7 @@ public class TrackerActivity extends AppCompatActivity implements BrokerCallback
     public boolean onMarkerClick(Marker marker, MapView mapView) {
         markerClick.checkMarker(marker);
         sortFab.setImageDrawable(CustomDrawable.create(context, GoogleMaterial.Icon.gmd_close, 24, R.color.primary_light));
+        mAddPost.setVisibility(View.GONE);
         return false;
     }
 

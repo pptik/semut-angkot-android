@@ -13,6 +13,20 @@
         android:layout_width="fill_parent"
         android:layout_height="match_parent"
         />
+    <Button
+        android:id="@+id/add_post"
+        android:drawablePadding="10dp"
+        android:drawableLeft="@android:drawable/ic_input_add"
+        android:layout_margin="10dp"
+        android:layout_width="wrap_content"
+        android:paddingLeft="15dp"
+        android:layout_centerHorizontal="true"
+        android:paddingRight="15dp"
+        android:layout_height="wrap_content"
+        android:text="Buat Laporan"
+        android:textColor="@android:color/white"
+        android:background="@drawable/bg_button_login"
+        />
     <RelativeLayout
         android:layout_width="match_parent"
         android:id="@+id/sortLayout"
@@ -88,5 +102,4 @@
         android:clickable="true"
         android:visibility="gone"
         />
-
 </RelativeLayout>
