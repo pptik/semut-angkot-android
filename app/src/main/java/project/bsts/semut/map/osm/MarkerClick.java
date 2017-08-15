@@ -8,12 +8,14 @@ import android.view.animation.Animation;
 import org.osmdroid.views.overlay.Marker;
 
 import project.bsts.semut.R;
+import project.bsts.semut.fragments.map.AngkotReportFragment;
 import project.bsts.semut.fragments.map.MapAngkotFragment;
 import project.bsts.semut.fragments.map.MapCctvFragment;
 import project.bsts.semut.fragments.map.MapReportFragment;
 import project.bsts.semut.fragments.map.MapTrackerFragment;
 import project.bsts.semut.fragments.map.MapUserFragment;
 import project.bsts.semut.pojo.angkot.Angkot;
+import project.bsts.semut.pojo.angkot.AngkotPost;
 import project.bsts.semut.pojo.mapview.AccidentMap;
 import project.bsts.semut.pojo.mapview.CctvMap;
 import project.bsts.semut.pojo.mapview.ClosureMap;
@@ -77,6 +79,12 @@ public class MarkerClick {
             MapAngkotFragment mapAngkotFragment = new MapAngkotFragment();
             mapAngkotFragment.setData((Angkot) marker.getRelatedObject());
             fragmentTransUtility.setAngkotMapFragment(mapAngkotFragment, frameView.getId());
+            frameView.setVisibility(View.VISIBLE);
+            frameView.startAnimation(fromRight);
+        }else if(marker.getRelatedObject() instanceof AngkotPost){
+            AngkotReportFragment mapAngkotFragment = new AngkotReportFragment();
+            mapAngkotFragment.setData((AngkotPost) marker.getRelatedObject());
+            fragmentTransUtility.setAngkotReportFragment(mapAngkotFragment, frameView.getId());
             frameView.setVisibility(View.VISIBLE);
             frameView.startAnimation(fromRight);
         }

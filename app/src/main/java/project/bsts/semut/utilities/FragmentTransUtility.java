@@ -7,6 +7,7 @@ import android.content.Context;
 
 import project.bsts.semut.R;
 import project.bsts.semut.fragments.FilterFragment;
+import project.bsts.semut.fragments.map.AngkotReportFragment;
 import project.bsts.semut.fragments.map.MapAngkotFragment;
 import project.bsts.semut.fragments.map.MapCctvFragment;
 import project.bsts.semut.fragments.map.MapReportFragment;
@@ -51,6 +52,12 @@ public class FragmentTransUtility {
 
 
     public void setAngkotMapFragment(MapAngkotFragment fragment, int id){
+        fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(id, fragment);
+        fragmentTransaction.commit();
+    }
+
+    public void setAngkotReportFragment(AngkotReportFragment fragment, int id){
         fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(id, fragment);
         fragmentTransaction.commit();

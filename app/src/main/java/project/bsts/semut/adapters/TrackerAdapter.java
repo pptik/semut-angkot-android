@@ -81,7 +81,7 @@ public class TrackerAdapter extends BaseAdapter {
         boolean state = (i == checkedState);
         String detail = "Jurusan : "+angkots[i].getAngkot().getTrayek().getNama();
 
-        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        SimpleDateFormat df = new SimpleDateFormat("yyyyy/MM/dd HH:mm:ss");
         Date date = new Date(System.currentTimeMillis() - 3600 * 10);
         String dateNow = df.format(date);
         String dateToCompare = angkots[i].getAngkot().getLastUpdate().replace('-', '/');
