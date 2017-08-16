@@ -79,8 +79,8 @@ public class TrackerAdapter extends BaseAdapter {
         gpsDetail = (TextView)view.findViewById(R.id.gps_detail);
 
         boolean state = (i == checkedState);
-        String detail = "Jurusan : "+angkots[i].getAngkot().getTrayek().getNama();
-
+        String detail = "<b>Jurusan : </b>"+angkots[i].getAngkot().getTrayek().getNama();
+        detail += "<br><b>Lokasi Tanggal : </b>"+angkots[i].getAngkot().getLastUpdate();
         SimpleDateFormat df = new SimpleDateFormat("yyyyy/MM/dd HH:mm:ss");
         Date date = new Date(System.currentTimeMillis() - 3600 * 10);
         String dateNow = df.format(date);
@@ -90,7 +90,7 @@ public class TrackerAdapter extends BaseAdapter {
         else detail += " <br> <b><font color='blue'>LOKASI UPDATE</font></b>";
 
         gpsNameText.setText(angkots[i].getAngkot().getPlatNomor());
-        gpsLocText.setText("Jumlah Penumpang : "+angkots[i].getAngkot().getJumlahPenumpang().toString());
+        gpsLocText.setText(angkots[i].getAngkot().getJumlahPenumpang().toString());
         gpsDetail.setText(Html.fromHtml(detail), TextView.BufferType.SPANNABLE);
         stateRadio.setChecked(state);
 

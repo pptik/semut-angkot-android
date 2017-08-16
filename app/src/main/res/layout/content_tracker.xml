@@ -76,7 +76,7 @@
         </RelativeLayout>
         <View
             android:layout_width="match_parent"
-            android:layout_height="1dp"
+            android:layout_height="2dp"
             android:id="@+id/divider"
             android:layout_below="@id/myLocLay"
             android:background="@color/colorPrimaryDark" />
@@ -86,9 +86,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:cacheColorHint="#00000000"
-            android:divider="@color/colorPrimaryDark"
+            android:divider="@android:color/transparent"
             android:dividerHeight="1dp"
-            android:background="#fff"
+            android:background="@color/primary"
             android:scrollbars="none"
             android:layout_marginBottom="?actionBarSize"
             >

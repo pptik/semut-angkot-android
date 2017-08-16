@@ -69,18 +69,9 @@ public class SignupActivity extends AppCompatActivity implements IConnectionResp
         dialog.setMessage("Memuat...");
 
         initIcon();
-        mButtonSignup.setOnClickListener(v -> validate());
+        mButtonSignup.setOnClickListener(v -> doLogin());
     }
 
-    private void validate(){
-        if(loginType == 0){
-            if(FieldValidator.isValidEmailAddress(mEditEmail.getText().toString())) doLogin();
-            else Snackbar.make(mEditEmail, "Email tidak valid", Snackbar.LENGTH_LONG).show();
-        }else {
-            if(FieldValidator.isValidPhoneNumber(mEditEmail.getText().toString()))doLogin();
-            else Snackbar.make(mEditEmail, "Nomor telepon tidak valid", Snackbar.LENGTH_LONG).show();
-        }
-    }
 
     private void doLogin(){
 

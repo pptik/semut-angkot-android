@@ -1,8 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
-
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        app:cardBackgroundColor="@color/cardview_light_background"
+        app:cardElevation="3dp"
+        app:cardCornerRadius="2dp"
+        app:cardMaxElevation="2dp"
+        app:contentPadding="5dp"
+        app:cardUseCompatPadding="true"
+        android:layout_height="wrap_content">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -15,30 +25,70 @@
             android:layout_alignParentRight="true"
             />
         <LinearLayout
-            android:layout_width="wrap_content"
             android:layout_toLeftOf="@id/state"
-            android:layout_alignParentLeft="true"
+            android:id="@+id/layout_penumpang"
             android:orientation="vertical"
-            android:padding="10dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content">
             <TextView
                 android:layout_width="wrap_content"
+                android:gravity="center"
                 android:layout_height="wrap_content"
-                android:id="@+id/gps_name"
-                android:text="test"
-                android:textColor="@color/colorAccent"
-                style="@style/Base.TextAppearance.AppCompat.Small"
+                android:text="Jumlah \nPenumpang"
+                android:textSize="@dimen/font_8"
                 android:textStyle="bold"
                 />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/gps_location"
-                android:text="test"
+                android:text="8"
+                android:layout_gravity="center_horizontal"
                 android:textColor="#444444"
-                style="@style/Base.TextAppearance.AppCompat.Small"
+                android:textSize="@dimen/font_45"
                 android:textStyle="bold"
                 />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_toLeftOf="@id/layout_penumpang"
+            android:layout_alignParentLeft="true"
+            android:orientation="vertical"
+            android:padding="10dp"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:orientation="horizontal"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/icon_angkot"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/angkot_track"
+                    />
+                <TextView
+                    android:background="@drawable/bg_almost_round"
+                    android:layout_gravity="center_vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/gps_name"
+                    android:text="Z4545TD"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:layout_marginLeft="5dp"
+                    android:textColor="@color/white"
+
+                    style="@style/Base.TextAppearance.AppCompat.Medium"
+
+                    />
+            </LinearLayout>
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -49,4 +99,5 @@
                 />
         </LinearLayout>
     </RelativeLayout>
+    </android.support.v7.widget.CardView>
 </LinearLayout>
