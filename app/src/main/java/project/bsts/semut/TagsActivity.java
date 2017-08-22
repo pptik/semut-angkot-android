@@ -1,6 +1,5 @@
 package project.bsts.semut;
 
-import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
@@ -8,7 +7,6 @@ import android.support.v7.app.AppCompatActivity;
 
 
 import project.bsts.semut.fragments.map.SubmitTagFragment;
-import project.bsts.semut.fragments.map.TagsFragment;
 
 
 public class TagsActivity extends AppCompatActivity {
