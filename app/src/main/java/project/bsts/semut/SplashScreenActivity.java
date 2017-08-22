@@ -15,6 +15,7 @@ import android.view.WindowManager;
 import android.view.Window;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
@@ -25,7 +26,10 @@ import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 
 import java.util.List;
 
+import project.bsts.semut.connections.rest.IConnectionResponseHandler;
+import project.bsts.semut.connections.rest.RequestRest;
 import project.bsts.semut.helper.PermissionHelper;
+import project.bsts.semut.pojo.RequestStatus;
 import project.bsts.semut.ui.CommonAlerts;
 import project.bsts.semut.utilities.CheckService;
 import android.Manifest;
@@ -51,10 +55,7 @@ public class SplashScreenActivity extends AppCompatActivity {
 
             if(CheckService.isInternetAvailable(context)) {
                 if (CheckService.isGpsEnabled(this)) {
-                    //
                     checkPermission();
-
-                    //
                 } else CommonAlerts.gspIsDisable(this);
             }else CommonAlerts.internetIsDisabled(this);
 
@@ -108,10 +109,7 @@ public class SplashScreenActivity extends AppCompatActivity {
                 }
 
                 if(isApprove){
-                    Intent intent = new Intent(SplashScreenActivity.this, TrackerActivity.class);
-                    startActivity(intent);
-                    finish();
-                    overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+                    checkStatus();
                 }
             }
             @Override public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {
@@ -121,6 +119,12 @@ public class SplashScreenActivity extends AppCompatActivity {
     }
 
 
+    private void toDashboard(){
+        Intent intent = new Intent(SplashScreenActivity.this, TrackerActivity.class);
+        startActivity(intent);
+        finish();
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+    }
 
 
     public void showPermissionRationale(final PermissionToken token) {
@@ -139,6 +143,17 @@ public class SplashScreenActivity extends AppCompatActivity {
     }
 
 
+    private void checkStatus(){
+        new RequestRest(context, (pResult, type) -> {
+            RequestStatus requestStatus = new Gson().fromJson(pResult, RequestStatus.class);
+            if(requestStatus.getSuccess()){
+                // to main
+                toDashboard();
+            }else {
+                CommonAlerts.errorSession(context, requestStatus.getMessage());
+            }
+        }).checkStatus();
+    }
 
 
     @Override

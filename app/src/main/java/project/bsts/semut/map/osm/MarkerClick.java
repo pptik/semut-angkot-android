@@ -13,16 +13,7 @@ import project.bsts.semut.fragments.map.MapAngkotFragment;
 import project.bsts.semut.fragments.map.MapTrackerFragment;
 import project.bsts.semut.pojo.angkot.Angkot;
 import project.bsts.semut.pojo.angkot.AngkotPost;
-import project.bsts.semut.pojo.mapview.AccidentMap;
-import project.bsts.semut.pojo.mapview.CctvMap;
-import project.bsts.semut.pojo.mapview.ClosureMap;
-import project.bsts.semut.pojo.mapview.DisasterMap;
-import project.bsts.semut.pojo.mapview.OtherMap;
-import project.bsts.semut.pojo.mapview.PoliceMap;
 import project.bsts.semut.pojo.mapview.Tracker;
-import project.bsts.semut.pojo.mapview.TrafficMap;
-import project.bsts.semut.pojo.mapview.TranspostMap;
-import project.bsts.semut.pojo.mapview.UserMap;
 import project.bsts.semut.ui.AnimationView;
 import project.bsts.semut.utilities.FragmentTransUtility;
 
