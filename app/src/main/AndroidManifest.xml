@@ -53,11 +53,6 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <activity
-            android:name=".CctvPlayerActivity"
-            android:label="@string/title_activity_semut"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
             android:name=".TagsActivity"
             android:label="Semut Angkot"
             android:screenOrientation="portrait"
@@ -78,31 +73,6 @@
             android:exported="true" />
 
         <activity
-            android:name=".SocialReportActivity"
-            android:label="@string/title_activity_main"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".MainActivity"
-            android:label="@string/title_activity_main"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".CityCctvActivity"
-            android:label="@string/title_activity_city_cctv"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".CctvListActivity"
-            android:label="@string/title_activity_cctv_list"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".TransportationListActivity"
-            android:label="@string/title_activity_transportation_list"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
             android:name=".TrackerActivity"
             android:label="@string/title_activity_angkot_tracker"
             android:screenOrientation="portrait"
@@ -112,10 +82,6 @@
             android:label="@string/title_activity_signup"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".EmergencyActivity"
-            android:label="@string/title_activity_emergency"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

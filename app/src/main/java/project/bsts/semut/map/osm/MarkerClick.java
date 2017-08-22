@@ -10,10 +10,7 @@ import org.osmdroid.views.overlay.Marker;
 import project.bsts.semut.R;
 import project.bsts.semut.fragments.map.AngkotReportFragment;
 import project.bsts.semut.fragments.map.MapAngkotFragment;
-import project.bsts.semut.fragments.map.MapCctvFragment;
-import project.bsts.semut.fragments.map.MapReportFragment;
 import project.bsts.semut.fragments.map.MapTrackerFragment;
-import project.bsts.semut.fragments.map.MapUserFragment;
 import project.bsts.semut.pojo.angkot.Angkot;
 import project.bsts.semut.pojo.angkot.AngkotPost;
 import project.bsts.semut.pojo.mapview.AccidentMap;
@@ -45,34 +42,10 @@ public class MarkerClick {
     }
 
     public void checkMarker(Marker marker){
-        if(marker.getRelatedObject() instanceof UserMap){
-            MapUserFragment mapUserFragment = new MapUserFragment();
-            mapUserFragment.setData((UserMap) marker.getRelatedObject());
-            fragmentTransUtility.setUserMapFragment(mapUserFragment, frameView.getId());
-            frameView.setVisibility(View.VISIBLE);
-            frameView.startAnimation(fromRight);
-        }else if(marker.getRelatedObject() instanceof CctvMap){
-            MapCctvFragment mapCctvFragment = new MapCctvFragment();
-            mapCctvFragment.setData((CctvMap) marker.getRelatedObject());
-            fragmentTransUtility.setCctvMapFragment(mapCctvFragment, frameView.getId());
-            frameView.setVisibility(View.VISIBLE);
-            frameView.startAnimation(fromRight);
-        }else if(marker.getRelatedObject() instanceof Tracker){
+        if(marker.getRelatedObject() instanceof Tracker){
             MapTrackerFragment mapTrackerFragment = new MapTrackerFragment();
             mapTrackerFragment.setData((Tracker) marker.getRelatedObject());
             fragmentTransUtility.setTrackerMapFragment(mapTrackerFragment, frameView.getId());
-            frameView.setVisibility(View.VISIBLE);
-            frameView.startAnimation(fromRight);
-        }else if(marker.getRelatedObject() instanceof PoliceMap ||
-                marker.getRelatedObject() instanceof AccidentMap ||
-                marker.getRelatedObject() instanceof TrafficMap ||
-                marker.getRelatedObject() instanceof DisasterMap ||
-                marker.getRelatedObject() instanceof ClosureMap ||
-                marker.getRelatedObject() instanceof TranspostMap ||
-                marker.getRelatedObject() instanceof OtherMap){
-            MapReportFragment mapReportFragment = new MapReportFragment();
-            mapReportFragment.setData(marker.getRelatedObject());
-            fragmentTransUtility.setReportMapFragment(mapReportFragment, frameView.getId());
             frameView.setVisibility(View.VISIBLE);
             frameView.startAnimation(fromRight);
         }else if(marker.getRelatedObject() instanceof Angkot){
