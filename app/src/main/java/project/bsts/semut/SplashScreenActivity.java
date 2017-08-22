@@ -120,7 +120,7 @@ public class SplashScreenActivity extends AppCompatActivity {
 
 
     private void toDashboard(){
-        Intent intent = new Intent(SplashScreenActivity.this, TrackerActivity.class);
+        Intent intent = new Intent(SplashScreenActivity.this, CheckInActivity.class);
         startActivity(intent);
         finish();
         overridePendingTransition(R.anim.fade_in, R.anim.fade_out);

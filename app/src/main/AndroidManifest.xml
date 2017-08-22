@@ -82,6 +82,10 @@
             android:label="@string/title_activity_signup"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".CheckInActivity"
+            android:theme="@style/Theme.Transparent"
+            ></activity>
     </application>
 
 </manifest>

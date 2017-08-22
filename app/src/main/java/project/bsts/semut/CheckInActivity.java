@@ -2,26 +2,24 @@ package project.bsts.semut;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+
+import project.bsts.semut.fragments.map.CheckInFragment;
 
 
-import project.bsts.semut.fragments.map.SubmitTagFragment;
 
-
-public class TagsActivity extends AppCompatActivity {
+public class CheckInActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_tags);
+        setContentView(R.layout.activity_check_in);
         getSupportActionBar().hide();
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        SubmitTagFragment tagsFragment = new SubmitTagFragment();
-        tagsFragment.setContext(this);
+        CheckInFragment tagsFragment = new CheckInFragment();
         fragmentTransaction.replace(R.id.container, tagsFragment);
-
         fragmentTransaction.commit();
     }
 }
