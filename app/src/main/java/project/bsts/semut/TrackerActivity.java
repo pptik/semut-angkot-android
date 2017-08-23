@@ -183,7 +183,7 @@ public class TrackerActivity extends AppCompatActivity implements BrokerCallback
         mapset.setMaxZoomLevel(19);
         mapController = mapset.getController();
         osmMarker = new OsmMarker(mapset);
-        mapController.setZoom(19);
+        mapController.setZoom(17);
         sortFab.setImageDrawable(CustomDrawable.create(context, GoogleMaterial.Icon.gmd_sort, 24, R.color.primary_light));
         sortFab.setOnClickListener(view -> doFab());
         markerAnimation = new OSMarkerAnimation();
