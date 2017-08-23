@@ -30,6 +30,7 @@ import project.bsts.semut.connections.rest.IConnectionResponseHandler;
 import project.bsts.semut.connections.rest.RequestRest;
 import project.bsts.semut.helper.PermissionHelper;
 import project.bsts.semut.pojo.RequestStatus;
+import project.bsts.semut.setup.Constants;
 import project.bsts.semut.ui.CommonAlerts;
 import project.bsts.semut.utilities.CheckService;
 import android.Manifest;
@@ -145,13 +146,15 @@ public class SplashScreenActivity extends AppCompatActivity {
 
     private void checkStatus(){
         new RequestRest(context, (pResult, type) -> {
-            RequestStatus requestStatus = new Gson().fromJson(pResult, RequestStatus.class);
-            if(requestStatus.getSuccess()){
-                // to main
-                toDashboard();
-            }else {
-                CommonAlerts.errorSession(context, requestStatus.getMessage());
-            }
+            if(type.equals(Constants.REST_USER_STATUS)) {
+                RequestStatus requestStatus = new Gson().fromJson(pResult, RequestStatus.class);
+                if (requestStatus.getSuccess()) {
+                    // to main
+                    toDashboard();
+                } else {
+                    CommonAlerts.errorSession(context, requestStatus.getMessage());
+                }
+            }else CommonAlerts.commonError(context, Constants.MESSAGE_HTTP_ERROR);
         }).checkStatus();
     }
 

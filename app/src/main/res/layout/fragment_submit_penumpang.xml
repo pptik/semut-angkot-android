@@ -62,7 +62,13 @@
                 android:id="@+id/textView6"
                 android:textColor="@color/semut_blue_color"
                 android:layout_marginTop="10dp" />
-
+            <Spinner
+                android:layout_marginTop="10dp"
+                android:padding="10dp"
+                android:background="@drawable/shape_drop_down_normal"
+                android:id="@+id/spinnerTrayek"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
             <EditText
                 android:layout_marginTop="10dp"
                 android:padding="15dp"
