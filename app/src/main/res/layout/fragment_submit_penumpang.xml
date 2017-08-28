@@ -2,10 +2,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:animateLayoutChanges="true"
     tools:context="project.bsts.semut.fragments.map.SubmitTagFragment"
     android:background="@drawable/bg_white_rounded">
 
     <LinearLayout
+        android:animateLayoutChanges="true"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -62,31 +64,44 @@
                 android:id="@+id/textView6"
                 android:textColor="@color/semut_blue_color"
                 android:layout_marginTop="10dp" />
-            <Spinner
-                android:layout_marginTop="10dp"
-                android:padding="10dp"
-                android:background="@drawable/shape_drop_down_normal"
-                android:id="@+id/spinnerTrayek"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-            <EditText
-                android:layout_marginTop="10dp"
-                android:padding="15dp"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="number"
-                android:id="@+id/remarks"
-                style="@style/Base.TextAppearance.AppCompat.Title"
-                android:layout_weight="0.10"
-                android:background="@drawable/stroke_rounded_blue"
-                android:hint="Ketik Jumlah Penumpang..."
-                android:gravity="top"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp"
-                android:maxLength="2" />
-
+                android:orientation="vertical"
+                android:id="@+id/layoutSpinner"
+                >
+                <Spinner
+                    android:layout_marginTop="10dp"
+                    android:padding="10dp"
+                    android:background="@drawable/shape_drop_down_normal"
+                    android:id="@+id/spinnerTrayek"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+                <Spinner
+                    android:layout_marginTop="10dp"
+                    android:padding="10dp"
+                    android:background="@drawable/shape_drop_down_normal"
+                    android:id="@+id/spinnerArah"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+                <EditText
+                    android:layout_marginTop="10dp"
+                    android:padding="15dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:id="@+id/remarks"
+                    style="@style/Base.TextAppearance.AppCompat.Title"
+                    android:layout_weight="0.10"
+                    android:background="@drawable/stroke_rounded_blue"
+                    android:hint="Ketik Jumlah Penumpang..."
+                    android:gravity="top"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:maxLength="2" />
+            </LinearLayout>
             <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="match_parent"
