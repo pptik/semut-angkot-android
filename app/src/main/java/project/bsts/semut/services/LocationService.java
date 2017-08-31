@@ -50,14 +50,12 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
     private GoogleApiClient mGoogleApiClient;
     private String TAG = this.getClass().getSimpleName();
     private BroadcastManager broadcastManager;
-    private ScheduleTask task;
     private JSONObject object;
-    private Factory mqFactory;
-    private Consumer mqConsumer;
-    private Producer mqProducer;
+
     private PreferenceManager preferenceManager;
     Session session;
     Profile profile;
+
     public LocationService() {
 
     }
@@ -71,6 +69,7 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        Log.i(TAG, "Start Command");
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
@@ -88,54 +87,10 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
         preferenceManager = new PreferenceManager(getApplicationContext());
         session = new Gson().fromJson(preferenceManager.getString(Constants.PREF_SESSION_ID), Session.class);
         profile = new Gson().fromJson(preferenceManager.getString(Constants.PREF_PROFILE), Profile.class);
-        connectToRabbit();
-        consume();
+
         return super.onStartCommand(intent, flags, startId);
     }
 
-    private void connectToRabbit() {
-        this.mqFactory = new Factory(Config.hostName, Config.virtualHostname, Config.username, Config.password, Config.exchange, Config.rotuingkey, Config.port);
-        this.mqConsumer = this.mqFactory.createConsumer(this);
-
-    }
-
-    private void consume(){
-
-        mqConsumer.setQueueName(profile.getID()+"-"+session.getSessionID());
-        mqConsumer.subsribe();
-        mqConsumer.setMessageListner(delivery -> {
-            try {
-                final String message = new String(delivery.getBody(), "UTF-8");
-                Log.i(TAG, "-------------------------------------");
-                Log.i(TAG, "incoming message type : "+delivery.getProperties().getType());
-                Log.i(TAG, "-------------------------------------");
-            //    Log.i(TAG, message);
-                broadCastMessage(delivery.getProperties().getType(), message);
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
-
-        });
-
-    }
-
-
-    private void publish(){
-        mqProducer = mqFactory.createProducer(LocationService.this);
-        String corrId = java.util.UUID.randomUUID().toString();
-        AMQP.BasicProperties props = new AMQP.BasicProperties
-                .Builder()
-                .replyTo(mqConsumer.getQueueName())
-                .correlationId(corrId)
-                .type(Constants.MQ_INCOMING_TYPE_MAPVIEW)
-                .build();
-        mqProducer.setRoutingkey(Constants.ROUTING_KEY_UPDATE_LOCATION);
-        String message = JSONRequest.storeLocation(session.getSessionID(), altitude, preferenceManager.getDouble(Constants.ENTITY_LATITUDE, 0), preferenceManager.getDouble(Constants.ENTITY_LONGITUDE, 0), speed,
-                GetCurrentDate.now(), preferenceManager.getInt(Constants.MAP_RADIUS, 3) * 1000,
-                preferenceManager.getInt(Constants.MAP_LIMIT, 6), MapItem.get(getApplicationContext()), preferenceManager.getInt(Constants.IS_ONLINE, 0));
-        Log.i(TAG, message);
-        mqProducer.publish(message, props, false);
-    }
 
     @Override
     public void onDestroy() {
@@ -144,8 +99,6 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
             mGoogleApiClient.disconnect();
         }
-        task.stop();
-        mqConsumer.stop();
     }
 
 
@@ -158,14 +111,13 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
             Log.i(TAG, "LOCATION CONNECTED");
             LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
             if (location == null) {
-              //  LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+                LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
 
             } else {
                 latitude = location.getLatitude();
                 longitude = location.getLongitude();
                 speed = location.getSpeed();
                 altitude = location.getAltitude();
-                startTask();
                 broadCastMessage(Constants.BROADCAST_MY_LOCATION, JSONRequest.myLocation(latitude, longitude));
                 try {
                     object = new JSONObject();
@@ -178,13 +130,7 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
         }
     }
 
-    private void startTask() {
-        task = new ScheduleTask(30, periode -> {
-            Log.i(TAG, "Send no : "+periode);
-            publish();
-        });
-        task.startHandler();
-    }
+
 
     @Override
     public void onConnectionSuspended(int i) {

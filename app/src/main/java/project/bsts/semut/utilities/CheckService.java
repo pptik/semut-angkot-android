@@ -23,6 +23,15 @@ public class CheckService {
         return false;
     }
 
+    public static boolean isGoogleLocationServiceRunning(Context ctx){
+        ActivityManager manager = (ActivityManager) ctx.getSystemService(ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)){
+            if("project.bsts.semut.services.LocationService".equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     public static boolean isGpsEnabled(Context context){
         boolean isActive = false;

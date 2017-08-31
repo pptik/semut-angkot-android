@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.annotation.NonNull;
@@ -171,7 +172,13 @@ public class TrackerActivity extends AppCompatActivity implements BrokerCallback
 
         locService = new Intent(context, GetLocation.class);
         locService.putExtra(Constants.INTENT_LOCATION_WITH_STORING, false);
-        if (permissionHelper.requestFineLocation()) startService(locService);
+        if (permissionHelper.requestFineLocation()) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                startForegroundService(locService);
+            }else {
+                startService(locService);
+            }
+        }
 
         mProgressDialog = new ProgressDialog(context);
         markerClick = new MarkerClick(context, markerDetailLayout);

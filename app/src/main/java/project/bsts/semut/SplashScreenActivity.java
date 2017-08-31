@@ -30,6 +30,7 @@ import project.bsts.semut.connections.rest.IConnectionResponseHandler;
 import project.bsts.semut.connections.rest.RequestRest;
 import project.bsts.semut.helper.PermissionHelper;
 import project.bsts.semut.pojo.RequestStatus;
+import project.bsts.semut.services.LocationService;
 import project.bsts.semut.setup.Constants;
 import project.bsts.semut.ui.CommonAlerts;
 import project.bsts.semut.utilities.CheckService;
@@ -121,6 +122,14 @@ public class SplashScreenActivity extends AppCompatActivity {
 
 
     private void toDashboard(){
+        // refresh location service
+        if(CheckService.isGoogleLocationServiceRunning(context)){
+            stopService(new Intent(context, LocationService.class));
+            startService(new Intent(context, LocationService.class));
+
+        }else {
+            startService(new Intent(context, LocationService.class));
+        }
         Intent intent = new Intent(SplashScreenActivity.this, CheckInActivity.class);
         startActivity(intent);
         finish();
