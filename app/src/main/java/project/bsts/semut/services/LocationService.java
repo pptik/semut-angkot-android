@@ -119,6 +119,7 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
             if (location == null) {
                 LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
                 Log.i(TAG, "location null");
+                broadCastMessage(Constants.BROADCAST_MY_LOCATION_NULL, "");
             } else {
                 latitude = location.getLatitude();
                 longitude = location.getLongitude();
@@ -174,9 +175,10 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
         Log.i(TAG, type+" - "+message);
         switch (type){
             case Constants.BROADCAST_MY_LOCATION:
-
                 broadcastManager.sendBroadcastToUI(type, message);
                 break;
+            case Constants.BROADCAST_MY_LOCATION_NULL:
+                broadcastManager.sendBroadcastToUI(type, message);
         }
     }
 
