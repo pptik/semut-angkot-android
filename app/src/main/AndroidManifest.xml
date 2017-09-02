@@ -40,6 +40,7 @@
         <activity
             android:name=".LoginActivity"
             android:label="Semut Angkot"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -55,6 +56,7 @@
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <activity
             android:name=".TagsActivity"
+
             android:label="Semut Angkot"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Transparent" />
@@ -85,6 +87,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".CheckInActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.Transparent"
             ></activity>
 
