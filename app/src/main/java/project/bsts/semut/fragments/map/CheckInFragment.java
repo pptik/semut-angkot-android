@@ -54,6 +54,7 @@ public class CheckInFragment extends Fragment {
     LinearLayout mLayoutSpinner;
     private int trayekState, arahState;
     private PreferenceManager preferenceManager;
+    private String arahStr;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -121,6 +122,8 @@ public class CheckInFragment extends Fragment {
                         preferenceManager.save(object.getString("object_id"), Constants.PREFS_WAITING_STATUS_OBJECT_ID);
                         preferenceManager.save(true, Constants.PREFS_IS_WAITING);
                         preferenceManager.save(jumlahPenumpang, Constants.PREFS_WAITING_COUNT);
+                        preferenceManager.save(arahStr, Constants.PREFS_WAITING_ROUTE);
+                        preferenceManager.apply();
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -201,8 +204,10 @@ public class CheckInFragment extends Fragment {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if(position > 0){
                     arahState = position -1;
-                    if(mRemarks.getVisibility() == View.GONE)
+                    if(mRemarks.getVisibility() == View.GONE) {
                         mRemarks.setVisibility(View.VISIBLE);
+                        arahStr = mSpinnerArah.getSelectedItem().toString();
+                    }
                 }
             }
 
@@ -221,7 +226,7 @@ public class CheckInFragment extends Fragment {
         b.setOngoing(true)
                 .setDefaults(Notification.DEFAULT_ALL)
                 .setWhen(System.currentTimeMillis())
-                .setSmallIcon(android.R.drawable.ic_dialog_info)
+                .setSmallIcon(R.drawable.ic_hourglass_empty_black_24dp)
                 .setTicker("Semut Angkot")
                 .setContentTitle("Semut Angkot")
                 .setContentText("Anda sedang dalam status menunggu Angkot, ketuk untuk mengakhiri")
