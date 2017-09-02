@@ -13,10 +13,12 @@ public class CompareDate {
         Log.i("Compare date", "date to compare "+date1);
         Log.i("Compare date", "date now "+now);
         boolean isExpired = false;
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
         try {
             Date dateToCompare = sdf.parse(date1);
             Date dateNow = sdf.parse(now);
+            Log.i("Compare date", "curr "+sdf.parse(date1));
+            Log.i("Compare date", "now "+sdf.parse(now));
             if(dateToCompare.before(dateNow)){
                 //System.out.println("Date1 is before Date2");
                 isExpired = true;

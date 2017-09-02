@@ -73,15 +73,15 @@ public class TrackerAdapter extends BaseAdapter {
       //  identityView.setTag(i);
 
         view = mInflater.inflate(R.layout.layout_list_tracker_filter, null);
-        gpsNameText = (TextView)view.findViewById(R.id.gps_name);
-        stateRadio = (RadioButton)view.findViewById(R.id.state);
-        gpsLocText = (TextView)view.findViewById(R.id.gps_location);
-        gpsDetail = (TextView)view.findViewById(R.id.gps_detail);
+        gpsNameText = view.findViewById(R.id.gps_name);
+        stateRadio = view.findViewById(R.id.state);
+        gpsLocText = view.findViewById(R.id.gps_location);
+        gpsDetail = view.findViewById(R.id.gps_detail);
 
         boolean state = (i == checkedState);
         String detail = "<b>Jurusan : </b>"+angkots[i].getAngkot().getTrayek().getNama();
         detail += "<br><b>Lokasi Tanggal : </b>"+angkots[i].getAngkot().getLastUpdate();
-        SimpleDateFormat df = new SimpleDateFormat("yyyyy/MM/dd HH:mm:ss");
+        SimpleDateFormat df = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
         Date date = new Date(System.currentTimeMillis() - 3600 * 10);
         String dateNow = df.format(date);
         String dateToCompare = angkots[i].getAngkot().getLastUpdate().replace('-', '/');
