@@ -23,6 +23,13 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.firebase.jobdispatcher.Constraint;
+import com.firebase.jobdispatcher.Driver;
+import com.firebase.jobdispatcher.FirebaseJobDispatcher;
+import com.firebase.jobdispatcher.GooglePlayDriver;
+import com.firebase.jobdispatcher.Job;
+import com.firebase.jobdispatcher.Lifetime;
+import com.firebase.jobdispatcher.Trigger;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
@@ -39,6 +46,7 @@ import project.bsts.semut.connections.rest.RequestRest;
 import project.bsts.semut.helper.PreferenceManager;
 import project.bsts.semut.pojo.RequestStatus;
 import project.bsts.semut.pojo.trayek.Trayek;
+import project.bsts.semut.services.CheckStatusJob;
 import project.bsts.semut.setup.Constants;
 import project.bsts.semut.ui.CommonAlerts;
 
@@ -235,6 +243,23 @@ public class CheckInFragment extends Fragment {
                 .setContentInfo("Info");
         NotificationManager notificationManager = (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(Constants.WAITING_NOTIFICATION_ID, b.build());
+
+
+        Driver driver = new GooglePlayDriver(getActivity());
+        FirebaseJobDispatcher firebaseJobDispatcher = new FirebaseJobDispatcher(driver);
+        firebaseJobDispatcher.cancelAll();
+        Job constraintReminderJob = firebaseJobDispatcher.newJobBuilder()
+                .setService(CheckStatusJob.class)
+                .setTag("checkstatus")
+                .setConstraints(Constraint.ON_ANY_NETWORK)
+                .setLifetime(Lifetime.FOREVER)
+                .setRecurring(true)
+                .setTrigger(Trigger.executionWindow(
+                        0,((60*60)*15)
+                ))
+                .setReplaceCurrent(true)
+                .build();
+        firebaseJobDispatcher.schedule(constraintReminderJob);
     }
 
     private void toTrackActivity(){

@@ -25,6 +25,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.firebase.jobdispatcher.Driver;
+import com.firebase.jobdispatcher.FirebaseJobDispatcher;
+import com.firebase.jobdispatcher.GooglePlayDriver;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
@@ -87,6 +90,11 @@ public class OnWaitingFragment extends Fragment {
                         cancelNotification();
                         preferenceManager.save(false, Constants.PREFS_IS_WAITING);
                         preferenceManager.apply();
+
+                        Driver driver = new GooglePlayDriver(getActivity());
+                        FirebaseJobDispatcher firebaseJobDispatcher = new FirebaseJobDispatcher(driver);
+                        firebaseJobDispatcher.cancelAll();
+
                         toTrackActivity();
                     }else CommonAlerts.commonError(getActivity(), requestStatus.getMessage());
                 }else CommonAlerts.commonError(getActivity(), Constants.MESSAGE_HTTP_ERROR);
