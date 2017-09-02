@@ -212,6 +212,7 @@ public class TrackerActivity extends AppCompatActivity implements BrokerCallback
         snackbar = TSnackbar.make(findViewById(android.R.id.content), "Gagal memuat lokasi perangkat Anda " +
                 "", TSnackbar.LENGTH_INDEFINITE);
         snackbar.setActionTextColor(Resource.Color.WHITE);
+       // snackbar.setIconLeft(R.drawable.cast_ic_expanded_controller_closed_caption, 24);
         snackbar.setAction("Close", view -> {
             snackbar.getView().setVisibility(View.GONE);
             snackbar.dismiss();
@@ -368,6 +369,17 @@ public class TrackerActivity extends AppCompatActivity implements BrokerCallback
         }
     }
 
+    private void zoomToNullLocation(){
+        // zoom to bandung
+        double _lat = -6.90389, _lon = 107.61861;
+        GeoPoint _geo = new GeoPoint(_lat, _lon);
+        mapController.setCenter(_geo);
+        mapController.animateTo(_geo);
+        mapController.setZoom(15);
+        mapset.invalidate();
+    }
+
+
     private void animateToSelected(){
         if(checkedState == -1) {
             if(markerMyLocation != null)
@@ -376,6 +388,7 @@ public class TrackerActivity extends AppCompatActivity implements BrokerCallback
                 if(snackbar.getView().getVisibility() != View.VISIBLE){
                     snackbar.getView().setVisibility(View.VISIBLE);
                     snackbar.show();
+                    //zoomToNullLocation();
                 }
             }
         }
@@ -520,6 +533,7 @@ public class TrackerActivity extends AppCompatActivity implements BrokerCallback
                 if(snackbar.getView().getVisibility() != View.VISIBLE){
                     snackbar.getView().setVisibility(View.VISIBLE);
                     snackbar.show();
+                    zoomToNullLocation();
                 }
                 break;
         }
