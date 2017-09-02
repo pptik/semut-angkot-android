@@ -7,6 +7,7 @@ import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.NotificationCompat;
@@ -37,6 +38,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 import project.bsts.semut.LoginActivity;
 import project.bsts.semut.R;
@@ -63,11 +65,23 @@ public class CheckInFragment extends Fragment {
     private int trayekState, arahState;
     private PreferenceManager preferenceManager;
     private String arahStr;
+    private  int REMINDER_INTERVAL_MINUTES = 15;
+    private  int REMINDER_INTERVAL_SECONDS = (int) (TimeUnit.MINUTES.toSeconds(REMINDER_INTERVAL_MINUTES));
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_submit_penumpang, container, false);
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
+            REMINDER_INTERVAL_MINUTES = 15;
+            REMINDER_INTERVAL_SECONDS = (int) (TimeUnit.MINUTES.toSeconds(REMINDER_INTERVAL_MINUTES));
+        }else {
+            REMINDER_INTERVAL_MINUTES = 5;
+            REMINDER_INTERVAL_SECONDS = (int) (TimeUnit.MINUTES.toSeconds(REMINDER_INTERVAL_MINUTES));
+        }
+
         mCancelBtn = view.findViewById(R.id.cancel_btn);
         mYesBtn = view.findViewById(R.id.submitButton);
         mCloseBtn = view.findViewById(R.id.closeButton);
@@ -255,12 +269,14 @@ public class CheckInFragment extends Fragment {
                 .setLifetime(Lifetime.FOREVER)
                 .setRecurring(true)
                 .setTrigger(Trigger.executionWindow(
-                        0,((60*60)*15)
-                ))
+                        REMINDER_INTERVAL_SECONDS,
+                        REMINDER_INTERVAL_SECONDS))
                 .setReplaceCurrent(true)
                 .build();
-        firebaseJobDispatcher.schedule(constraintReminderJob);
+       // firebaseJobDispatcher.schedule(constraintReminderJob);
+        firebaseJobDispatcher.mustSchedule(constraintReminderJob);
     }
+
 
     private void toTrackActivity(){
         startActivity(new Intent(getActivity(), TrackerActivity.class));

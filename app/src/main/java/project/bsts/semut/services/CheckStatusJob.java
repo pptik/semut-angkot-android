@@ -46,6 +46,7 @@ public class CheckStatusJob extends JobService {
                             new RequestRest(getApplicationContext(), (pResult1, type1) -> {
                                 Log.i("Job", "Update to finish");
                                 jobFinished(job, false);
+                                cancelNotification();
                             }).updatePenumpang(objectID);
                         }
                     } catch (JSONException e) {
@@ -64,6 +65,10 @@ public class CheckStatusJob extends JobService {
         return true;
     }
 
+    private void cancelNotification(){
+        NotificationManager manager = (NotificationManager) getApplication().getSystemService(Context.NOTIFICATION_SERVICE);
+        manager.cancel(Constants.WAITING_NOTIFICATION_ID);
+    }
 
     private void showNotification(){
         Intent intent = new Intent(getApplicationContext(), LoginActivity.class);

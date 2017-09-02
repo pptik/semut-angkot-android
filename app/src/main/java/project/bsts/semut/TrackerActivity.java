@@ -191,6 +191,7 @@ public class TrackerActivity extends AppCompatActivity implements BrokerCallback
         markerClick = new MarkerClick(context, markerDetailLayout);
         mProgressDialog.setMessage("Memuat...");
         mProgressDialog.show();
+        mProgressDialog.setCancelable(false);
         connectToRabbit();
         mapset.setTileSource(TileSourceFactory.DEFAULT_TILE_SOURCE);
         mapset.setMultiTouchControls(true);
@@ -452,7 +453,7 @@ public class TrackerActivity extends AppCompatActivity implements BrokerCallback
         super.onDestroy();
         mqConsumer.stop();
         broadcastManager.unSubscribeToUi();
-        if(CheckService.isLocationServiceRunning(context)){
+        if(CheckService.isGoogleLocationServiceRunning(context)){
             stopService(locService);
         }
     }
