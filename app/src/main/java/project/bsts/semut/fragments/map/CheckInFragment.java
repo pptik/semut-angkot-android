@@ -1,10 +1,15 @@
 package project.bsts.semut.fragments.map;
 
 import android.app.Fragment;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,10 +31,12 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import project.bsts.semut.LoginActivity;
 import project.bsts.semut.R;
 import project.bsts.semut.TrackerActivity;
 import project.bsts.semut.connections.rest.IConnectionResponseHandler;
 import project.bsts.semut.connections.rest.RequestRest;
+import project.bsts.semut.helper.PreferenceManager;
 import project.bsts.semut.pojo.RequestStatus;
 import project.bsts.semut.pojo.trayek.Trayek;
 import project.bsts.semut.setup.Constants;
@@ -46,24 +53,27 @@ public class CheckInFragment extends Fragment {
     ArrayList<Trayek> trayek = new ArrayList<Trayek>();
     LinearLayout mLayoutSpinner;
     private int trayekState, arahState;
+    private PreferenceManager preferenceManager;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_submit_penumpang, container, false);
-        mCancelBtn = (Button)view.findViewById(R.id.cancel_btn);
-        mYesBtn = (Button)view.findViewById(R.id.submitButton);
-        mCloseBtn = (ImageButton)view.findViewById(R.id.closeButton);
-        mRemarks = (EditText)view.findViewById(R.id.remarks);
-        mSpinnerTrayek = (Spinner)view.findViewById(R.id.spinnerTrayek);
-        mSpinnerArah = (Spinner)view.findViewById(R.id.spinnerArah);
-        mLayoutSpinner = (LinearLayout)view.findViewById(R.id.layoutSpinner);
+        mCancelBtn = view.findViewById(R.id.cancel_btn);
+        mYesBtn = view.findViewById(R.id.submitButton);
+        mCloseBtn = view.findViewById(R.id.closeButton);
+        mRemarks = view.findViewById(R.id.remarks);
+        mSpinnerTrayek = view.findViewById(R.id.spinnerTrayek);
+        mSpinnerArah = view.findViewById(R.id.spinnerArah);
+        mLayoutSpinner = view.findViewById(R.id.layoutSpinner);
         mLayoutSpinner.setVisibility(View.GONE);
         mSpinnerArah.setVisibility(View.GONE);
         mRemarks.setVisibility(View.GONE);
 
         mCloseBtn.setOnClickListener(v -> getActivity().finish());
         mCancelBtn.setOnClickListener(v -> toTrackActivity());
+
+        preferenceManager = new PreferenceManager(getActivity());
 
         mYesBtn.setOnClickListener(v -> {
             if(mYesBtn.getText().toString().equals("SUBMIT")){
@@ -106,6 +116,15 @@ public class CheckInFragment extends Fragment {
                 if(!requestStatus.getSuccess()) CommonAlerts.commonError(getActivity(), requestStatus.getMessage());
                 else {
                     Toast.makeText(getActivity(), "Berhasil mengirimkan status penumpang", Toast.LENGTH_LONG).show();
+                    try {
+                        JSONObject object = new JSONObject(pResult);
+                        preferenceManager.save(object.getString("object_id"), Constants.PREFS_WAITING_STATUS_OBJECT_ID);
+                        preferenceManager.save(true, Constants.PREFS_IS_WAITING);
+                        preferenceManager.save(jumlahPenumpang, Constants.PREFS_WAITING_COUNT);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    showNotification();
                     toTrackActivity();
                 }
             }else
@@ -194,6 +213,24 @@ public class CheckInFragment extends Fragment {
         });
     }
 
+
+    private void showNotification(){
+        Intent intent = new Intent(getActivity(), LoginActivity.class);
+        PendingIntent contentIntent = PendingIntent.getActivity(getActivity(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        NotificationCompat.Builder b = new NotificationCompat.Builder(getActivity());
+        b.setOngoing(true)
+                .setDefaults(Notification.DEFAULT_ALL)
+                .setWhen(System.currentTimeMillis())
+                .setSmallIcon(android.R.drawable.ic_dialog_info)
+                .setTicker("Semut Angkot")
+                .setContentTitle("Semut Angkot")
+                .setContentText("Anda sedang dalam status menunggu Angkot, ketuk untuk mengakhiri")
+                .setDefaults(Notification.DEFAULT_LIGHTS| Notification.DEFAULT_SOUND)
+                .setContentIntent(contentIntent)
+                .setContentInfo("Info");
+        NotificationManager notificationManager = (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(Constants.WAITING_NOTIFICATION_ID, b.build());
+    }
 
     private void toTrackActivity(){
         startActivity(new Intent(getActivity(), TrackerActivity.class));

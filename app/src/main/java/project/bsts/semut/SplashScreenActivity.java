@@ -2,6 +2,9 @@ package project.bsts.semut;
 
 
 import android.app.Activity;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -10,6 +13,7 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 import android.view.WindowManager;
 import android.view.Window;
@@ -166,6 +170,8 @@ public class SplashScreenActivity extends AppCompatActivity {
             }else CommonAlerts.commonError(context, Constants.MESSAGE_HTTP_ERROR);
         }).checkStatus();
     }
+
+
 
 
     @Override

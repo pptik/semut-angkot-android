@@ -25,14 +25,14 @@ public class BroadcastManager {
 
     public void sendBroadcastToUI(String broadcastType, String msg){
         Intent intent = new Intent();
-        intent.setAction(Constants.ACTION_OPANG_BROKER_BROADCAST_TO_UI);
+        intent.setAction(Constants.ACTION_BROADCAST_TO_UI);
         intent.putExtra(Constants.INTENT_BROADCAST_MSG, msg);
         intent.putExtra(Constants.INTENT_BROADCAST_TYPE, broadcastType);
         context.sendBroadcast(intent);
     }
 
     public void subscribeToUi(final UIBroadcastListener listener){
-        IntentFilter intentFilter = new IntentFilter(Constants.ACTION_OPANG_BROKER_BROADCAST_TO_UI);
+        IntentFilter intentFilter = new IntentFilter(Constants.ACTION_BROADCAST_TO_UI);
         uiReceiver = new BroadcastReceiver() {
             String resType = "";
             String _msg = "";
