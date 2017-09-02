@@ -6,6 +6,8 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -26,9 +28,13 @@ import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
+import android.widget.TextView;
 
+import com.androidadvance.topsnackbar.TSnackbar;
 import com.google.gson.Gson;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
+
+import net.qiujuer.genius.res.Resource;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -117,6 +123,7 @@ public class TrackerActivity extends AppCompatActivity implements BrokerCallback
     private Marker markerMyLocation;
     private OsmMarker osmMarker;
     private OSMarkerAnimation markerAnimation;
+    private TSnackbar snackbar;
 
 
 
@@ -145,7 +152,7 @@ public class TrackerActivity extends AppCompatActivity implements BrokerCallback
                 this, GoogleMaterial.Icon.gmd_more_horiz, 24, R.color.white));
         mMore.setOnClickListener(v -> showPopup(v));
 
-
+        setSnackbar();
 
         mRadioMyLocation.setOnCheckedChangeListener((compoundButton, b) -> {
             if(b) {
@@ -199,6 +206,23 @@ public class TrackerActivity extends AppCompatActivity implements BrokerCallback
             if(markerDetailLayout.getVisibility() == View.VISIBLE) markerDetailLayout.setVisibility(View.GONE);
         });
        // markerDetailLayout.setOnClickListener(v-> markerDetailLayout.startAnimation(slideDown));
+    }
+
+    private void setSnackbar() {
+        snackbar = TSnackbar.make(findViewById(android.R.id.content), "Gagal memuat lokasi perangkat Anda " +
+                "", TSnackbar.LENGTH_INDEFINITE);
+        snackbar.setActionTextColor(Resource.Color.WHITE);
+        snackbar.setAction("Close", view -> {
+            snackbar.getView().setVisibility(View.GONE);
+            snackbar.dismiss();
+        });
+        View snackbarView = snackbar.getView();
+        snackbarView.setVisibility(View.GONE);
+        snackbarView.setBackgroundColor(getResources().getColor(R.color.primary_dark));
+        TextView textView = snackbarView.findViewById(com.androidadvance.topsnackbar.R.id.snackbar_text);
+        textView.setTextColor(Color.YELLOW);
+
+        //snackbar.show();
     }
 
     private void doFab(){
@@ -348,6 +372,12 @@ public class TrackerActivity extends AppCompatActivity implements BrokerCallback
         if(checkedState == -1) {
             if(markerMyLocation != null)
                 mapController.animateTo(markerMyLocation.getPosition());
+            else {
+                if(snackbar.getView().getVisibility() != View.VISIBLE){
+                    snackbar.getView().setVisibility(View.VISIBLE);
+                    snackbar.show();
+                }
+            }
         }
         else mapController.animateTo(markers[checkedState].getPosition());
     }
@@ -480,6 +510,17 @@ public class TrackerActivity extends AppCompatActivity implements BrokerCallback
                     mapset.invalidate();
                 }
 
+                if(snackbar.getView().getVisibility() == View.VISIBLE){
+                    snackbar.dismiss();
+                    snackbar.getView().setVisibility(View.GONE);
+                }
+
+                break;
+            case Constants.BROADCAST_MY_LOCATION_NULL:
+                if(snackbar.getView().getVisibility() != View.VISIBLE){
+                    snackbar.getView().setVisibility(View.VISIBLE);
+                    snackbar.show();
+                }
                 break;
         }
     }
