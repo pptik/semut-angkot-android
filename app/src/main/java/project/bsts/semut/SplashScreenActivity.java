@@ -123,13 +123,13 @@ public class SplashScreenActivity extends AppCompatActivity {
 
     private void toDashboard(){
         // refresh location service
-        if(CheckService.isGoogleLocationServiceRunning(context)){
+     /*   if(CheckService.isGoogleLocationServiceRunning(context)){
             stopService(new Intent(context, LocationService.class));
             startService(new Intent(context, LocationService.class));
 
         }else {
             startService(new Intent(context, LocationService.class));
-        }
+        } */
         Intent intent = new Intent(SplashScreenActivity.this, CheckInActivity.class);
         startActivity(intent);
         finish();

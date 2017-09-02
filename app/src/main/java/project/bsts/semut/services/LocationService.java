@@ -38,6 +38,7 @@ import project.bsts.semut.helper.PreferenceManager;
 import project.bsts.semut.pojo.Profile;
 import project.bsts.semut.pojo.Session;
 import project.bsts.semut.setup.Constants;
+import project.bsts.semut.utilities.CheckService;
 import project.bsts.semut.utilities.GetCurrentDate;
 import project.bsts.semut.utilities.MapItem;
 import project.bsts.semut.utilities.ScheduleTask;
@@ -99,6 +100,10 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
             mGoogleApiClient.disconnect();
         }
+        if(CheckService.isGoogleLocationServiceRunning(getApplication())){
+            stopService(new Intent(getApplication(), LocationService.class));
+            Log.i(TAG, "Service Stopped");
+        }
     }
 
 
@@ -109,10 +114,11 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
         }else {
             Location location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
             Log.i(TAG, "LOCATION CONNECTED");
+         //   Log.i(TAG, ""+location.getLatitude()+" - "+location.getLongitude());
             LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
             if (location == null) {
                 LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
-
+                Log.i(TAG, "location null");
             } else {
                 latitude = location.getLatitude();
                 longitude = location.getLongitude();
@@ -165,11 +171,10 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
 
 
     private void broadCastMessage(String type, String message){
+        Log.i(TAG, type+" - "+message);
         switch (type){
             case Constants.BROADCAST_MY_LOCATION:
-                broadcastManager.sendBroadcastToUI(type, message);
-                break;
-            case Constants.MQ_INCOMING_TYPE_MAPVIEW:
+
                 broadcastManager.sendBroadcastToUI(type, message);
                 break;
         }

@@ -62,6 +62,7 @@ import project.bsts.semut.pojo.angkot.AngkotPost;
 import project.bsts.semut.pojo.mapview.MyLocation;
 import project.bsts.semut.pojo.mapview.Tracker;
 import project.bsts.semut.services.GetLocation;
+import project.bsts.semut.services.LocationService;
 import project.bsts.semut.setup.Constants;
 import project.bsts.semut.ui.AnimationView;
 import project.bsts.semut.ui.CommonAlerts;
@@ -170,15 +171,14 @@ public class TrackerActivity extends AppCompatActivity implements BrokerCallback
         broadcastManager.subscribeToUi(this);
 
 
-        locService = new Intent(context, GetLocation.class);
+        locService = new Intent(context, LocationService.class);
         locService.putExtra(Constants.INTENT_LOCATION_WITH_STORING, false);
-        if (permissionHelper.requestFineLocation()) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                startForegroundService(locService);
-            }else {
-                startService(locService);
-            }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            startForegroundService(locService);
+        }else {
+            startService(locService);
         }
+
 
         mProgressDialog = new ProgressDialog(context);
         markerClick = new MarkerClick(context, markerDetailLayout);
@@ -299,7 +299,7 @@ public class TrackerActivity extends AppCompatActivity implements BrokerCallback
                                     markerAnimation.animate(mapset, markers[i],
                                             new GeoPoint(angkots[i].getAngkot().getLocation().getCoordinates().get(1), angkots[i].getAngkot().getLocation().getCoordinates().get(0)),
                                             1500);
-                                    if (checkedState != -1) mapController.setZoom(19);
+                                    if (checkedState != -1) mapController.setZoom(17);
                                 } else {
                                     // same position
                                 }
@@ -345,7 +345,10 @@ public class TrackerActivity extends AppCompatActivity implements BrokerCallback
     }
 
     private void animateToSelected(){
-        if(checkedState == -1) mapController.animateTo(markerMyLocation.getPosition());
+        if(checkedState == -1) {
+            if(markerMyLocation != null)
+                mapController.animateTo(markerMyLocation.getPosition());
+        }
         else mapController.animateTo(markers[checkedState].getPosition());
     }
 
