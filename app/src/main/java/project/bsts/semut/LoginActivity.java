@@ -4,12 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
-import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -18,7 +16,6 @@ import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
-import com.facebook.GraphResponse;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
@@ -29,11 +26,9 @@ import java.util.Arrays;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import co.ceryle.radiorealbutton.library.RadioRealButton;
-import co.ceryle.radiorealbutton.library.RadioRealButtonGroup;
 import project.bsts.semut.connections.rest.IConnectionResponseHandler;
 import project.bsts.semut.connections.rest.RequestRest;
-import project.bsts.semut.helper.PreferenceManager;
+import project.bsts.semut.helper.PreferencesManager;
 import project.bsts.semut.ui.LoadingIndicator;
 import project.bsts.semut.setup.Constants;
 import project.bsts.semut.ui.ShowSnackbar;
@@ -61,7 +56,7 @@ public class LoginActivity extends AppCompatActivity implements FacebookCallback
     private Context context;
     private RequestRest rest;
     private String TAG = this.getClass().getSimpleName();
-    PreferenceManager preferenceManager;
+    PreferencesManager preferencesManager;
     private int loginType = 0;
 
     @Override
@@ -73,8 +68,8 @@ public class LoginActivity extends AppCompatActivity implements FacebookCallback
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("");
         context = this;
-        preferenceManager = new PreferenceManager(context);
-        if(preferenceManager.getBoolean(Constants.IS_LOGGED_IN)){
+        preferencesManager = new PreferencesManager(context);
+        if(preferencesManager.getBoolean(Constants.IS_LOGGED_IN)){
             toDashBoard();
         }
         loadingIndicator = new LoadingIndicator(context);
@@ -137,9 +132,9 @@ public class LoginActivity extends AppCompatActivity implements FacebookCallback
 
 
     private void populateUserData(String profile){
-        preferenceManager.save(profile, Constants.PREF_PROFILE);
-        preferenceManager.save(true, Constants.IS_LOGGED_IN);
-        preferenceManager.apply();
+        preferencesManager.save(profile, Constants.PREF_PROFILE);
+        preferencesManager.save(true, Constants.IS_LOGGED_IN);
+        preferencesManager.apply();
         toDashBoard();
     }
 

@@ -1,7 +1,6 @@
 package project.bsts.semut.map.osm;
 
 
-import com.google.gson.Gson;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 
 import org.osmdroid.util.GeoPoint;
@@ -9,12 +8,9 @@ import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Marker;
 
 import project.bsts.semut.R;
-import project.bsts.semut.helper.PreferenceManager;
-import project.bsts.semut.pojo.Profile;
 import project.bsts.semut.pojo.mapview.MyLocation;
 import project.bsts.semut.pojo.mapview.Tracker;
 import project.bsts.semut.pojo.mapview.TranspostMap;
-import project.bsts.semut.setup.Constants;
 import project.bsts.semut.utilities.CustomDrawable;
 
 public class OsmMarker {

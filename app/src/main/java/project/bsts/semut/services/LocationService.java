@@ -19,29 +19,18 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.gson.Gson;
-import com.rabbitmq.client.AMQP;
-import com.rabbitmq.client.QueueingConsumer;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.UnsupportedEncodingException;
-
 import project.bsts.semut.connections.broker.BrokerCallback;
-import project.bsts.semut.connections.broker.Config;
-import project.bsts.semut.connections.broker.Consumer;
-import project.bsts.semut.connections.broker.Factory;
-import project.bsts.semut.connections.broker.Producer;
 import project.bsts.semut.helper.BroadcastManager;
 import project.bsts.semut.helper.JSONRequest;
-import project.bsts.semut.helper.PreferenceManager;
+import project.bsts.semut.helper.PreferencesManager;
 import project.bsts.semut.pojo.Profile;
 import project.bsts.semut.pojo.Session;
 import project.bsts.semut.setup.Constants;
 import project.bsts.semut.utilities.CheckService;
-import project.bsts.semut.utilities.GetCurrentDate;
-import project.bsts.semut.utilities.MapItem;
-import project.bsts.semut.utilities.ScheduleTask;
 
 public class LocationService extends Service implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener, LocationListener, BrokerCallback {
@@ -53,7 +42,7 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
     private BroadcastManager broadcastManager;
     private JSONObject object;
 
-    private PreferenceManager preferenceManager;
+    private PreferencesManager preferencesManager;
     Session session;
     Profile profile;
 
@@ -85,9 +74,9 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
         }
 
         broadcastManager = new BroadcastManager(getApplicationContext());
-        preferenceManager = new PreferenceManager(getApplicationContext());
-        session = new Gson().fromJson(preferenceManager.getString(Constants.PREF_SESSION_ID), Session.class);
-        profile = new Gson().fromJson(preferenceManager.getString(Constants.PREF_PROFILE), Profile.class);
+        preferencesManager = new PreferencesManager(getApplicationContext());
+        session = new Gson().fromJson(preferencesManager.getString(Constants.PREF_SESSION_ID), Session.class);
+        profile = new Gson().fromJson(preferencesManager.getString(Constants.PREF_PROFILE), Profile.class);
 
         return super.onStartCommand(intent, flags, startId);
     }
@@ -163,9 +152,9 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
         Log.i(TAG, "Location Changed");
         latitude = location.getLatitude();
         longitude = location.getLongitude();
-        preferenceManager.save((float)latitude, Constants.ENTITY_LATITUDE);
-        preferenceManager.save((float)longitude, Constants.ENTITY_LONGITUDE);
-        preferenceManager.apply();
+        preferencesManager.save((float)latitude, Constants.ENTITY_LATITUDE);
+        preferencesManager.save((float)longitude, Constants.ENTITY_LONGITUDE);
+        preferencesManager.apply();
         broadCastMessage(Constants.BROADCAST_MY_LOCATION, JSONRequest.myLocation(latitude, longitude));
 
     }

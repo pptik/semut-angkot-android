@@ -6,13 +6,13 @@ import android.util.Log;
 
 import project.bsts.semut.setup.Constants;
 
-public class PreferenceManager {
+public class PreferencesManager {
 
     private Context context;
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
 
-    public PreferenceManager(Context _context){
+    public PreferencesManager(Context _context){
         context = _context;
         sharedPreferences = context.getSharedPreferences(Constants.PREF_NAME, Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();

@@ -4,7 +4,6 @@ package project.bsts.semut.ui;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -14,15 +13,13 @@ import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.DrawerBuilder;
-import com.mikepenz.materialdrawer.model.DividerDrawerItem;
 import com.mikepenz.materialdrawer.model.ExpandableDrawerItem;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
-import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
 import project.bsts.semut.LoginActivity;
 import project.bsts.semut.R;
-import project.bsts.semut.helper.PreferenceManager;
+import project.bsts.semut.helper.PreferencesManager;
 import project.bsts.semut.setup.Constants;
 
 
@@ -36,13 +33,13 @@ public class MainDrawer {
     private int identifier;
     private com.mikepenz.materialdrawer.Drawer result;
     private SecondaryDrawerItem bantuanItem;
-    private PreferenceManager preferenceManager;
+    private PreferencesManager preferencesManager;
 
     public MainDrawer(Context _context, Toolbar _toolbar, int _identifier){
         context = _context;
         toolbar = _toolbar;
         identifier = _identifier;
-        preferenceManager = new PreferenceManager(context);
+        preferencesManager = new PreferencesManager(context);
     }
 
     public void hideDrawer(){
@@ -125,8 +122,8 @@ public class MainDrawer {
 
                     switch ((int) drawerItem.getIdentifier()){
                         case 80:
-                            preferenceManager.save(false, Constants.IS_LOGGED_IN);
-                            preferenceManager.apply();
+                            preferencesManager.save(false, Constants.IS_LOGGED_IN);
+                            preferencesManager.apply();
                             Toast.makeText(context, "Signout berhasil", Toast.LENGTH_LONG).show();
                             context.startActivity(new Intent(context, LoginActivity.class));
                             ((Activity)context).finish();

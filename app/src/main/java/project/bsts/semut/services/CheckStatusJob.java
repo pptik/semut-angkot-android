@@ -19,19 +19,17 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import project.bsts.semut.LoginActivity;
-import project.bsts.semut.connections.rest.IConnectionResponseHandler;
 import project.bsts.semut.connections.rest.RequestRest;
-import project.bsts.semut.helper.PreferenceManager;
+import project.bsts.semut.helper.PreferencesManager;
 import project.bsts.semut.pojo.RequestStatus;
 import project.bsts.semut.setup.Constants;
-import project.bsts.semut.ui.CommonAlerts;
 
 public class CheckStatusJob extends JobService {
     @Override
     public boolean onStartJob(JobParameters job) {
         Log.i("job", "start job");
-        PreferenceManager preferenceManager = new PreferenceManager(getApplicationContext());
-        String objectID = preferenceManager.getString(Constants.PREFS_WAITING_STATUS_OBJECT_ID);
+        PreferencesManager preferencesManager = new PreferencesManager(getApplicationContext());
+        String objectID = preferencesManager.getString(Constants.PREFS_WAITING_STATUS_OBJECT_ID);
         new RequestRest(getApplicationContext(), (pResult, type) -> {
             if(type.contains(Constants.REST_CHECK_PENUMPANG)){
                 RequestStatus requestStatus = new Gson().fromJson(pResult, RequestStatus.class);

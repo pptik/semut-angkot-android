@@ -43,9 +43,8 @@ import java.util.concurrent.TimeUnit;
 import project.bsts.semut.LoginActivity;
 import project.bsts.semut.R;
 import project.bsts.semut.TrackerActivity;
-import project.bsts.semut.connections.rest.IConnectionResponseHandler;
 import project.bsts.semut.connections.rest.RequestRest;
-import project.bsts.semut.helper.PreferenceManager;
+import project.bsts.semut.helper.PreferencesManager;
 import project.bsts.semut.pojo.RequestStatus;
 import project.bsts.semut.pojo.trayek.Trayek;
 import project.bsts.semut.services.CheckStatusJob;
@@ -63,7 +62,7 @@ public class CheckInFragment extends Fragment {
     ArrayList<Trayek> trayek = new ArrayList<Trayek>();
     LinearLayout mLayoutSpinner;
     private int trayekState, arahState;
-    private PreferenceManager preferenceManager;
+    private PreferencesManager preferencesManager;
     private String arahStr;
     private  int REMINDER_INTERVAL_MINUTES = 15;
     private  int REMINDER_INTERVAL_SECONDS = (int) (TimeUnit.MINUTES.toSeconds(REMINDER_INTERVAL_MINUTES));
@@ -96,7 +95,7 @@ public class CheckInFragment extends Fragment {
         mCloseBtn.setOnClickListener(v -> getActivity().finish());
         mCancelBtn.setOnClickListener(v -> toTrackActivity());
 
-        preferenceManager = new PreferenceManager(getActivity());
+        preferencesManager = new PreferencesManager(getActivity());
 
         mYesBtn.setOnClickListener(v -> {
             if(mYesBtn.getText().toString().equals("SUBMIT")){
@@ -141,11 +140,11 @@ public class CheckInFragment extends Fragment {
                     Toast.makeText(getActivity(), "Berhasil mengirimkan status penumpang", Toast.LENGTH_LONG).show();
                     try {
                         JSONObject object = new JSONObject(pResult);
-                        preferenceManager.save(object.getString("object_id"), Constants.PREFS_WAITING_STATUS_OBJECT_ID);
-                        preferenceManager.save(true, Constants.PREFS_IS_WAITING);
-                        preferenceManager.save(jumlahPenumpang, Constants.PREFS_WAITING_COUNT);
-                        preferenceManager.save(arahStr, Constants.PREFS_WAITING_ROUTE);
-                        preferenceManager.apply();
+                        preferencesManager.save(object.getString("object_id"), Constants.PREFS_WAITING_STATUS_OBJECT_ID);
+                        preferencesManager.save(true, Constants.PREFS_IS_WAITING);
+                        preferencesManager.save(jumlahPenumpang, Constants.PREFS_WAITING_COUNT);
+                        preferencesManager.save(arahStr, Constants.PREFS_WAITING_ROUTE);
+                        preferencesManager.apply();
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

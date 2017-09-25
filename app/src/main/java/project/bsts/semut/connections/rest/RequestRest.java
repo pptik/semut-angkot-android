@@ -12,11 +12,8 @@ import com.loopj.android.http.RequestParams;
 import org.apache.http.Header;
 import org.json.JSONObject;
 
-import project.bsts.semut.R;
-import project.bsts.semut.helper.PreferenceManager;
-import project.bsts.semut.helper.TagsType;
+import project.bsts.semut.helper.PreferencesManager;
 import project.bsts.semut.pojo.Profile;
-import project.bsts.semut.pojo.Session;
 import project.bsts.semut.setup.Constants;
 import project.bsts.semut.utilities.GetCurrentDate;
 
@@ -24,13 +21,13 @@ public class RequestRest extends ConnectionHandler {
 
     protected static AsyncHttpClient mClient = new AsyncHttpClient();
     private String TAG = this.getClass().getSimpleName();
-    private PreferenceManager preferenceManager;
+    private PreferencesManager preferencesManager;
 
 
     public RequestRest(Context context, IConnectionResponseHandler handler) {
         this.mContext = context;
         this.responseHandler = handler;
-        preferenceManager = new PreferenceManager(mContext);
+        preferencesManager = new PreferencesManager(mContext);
     }
 
 
@@ -114,11 +111,11 @@ public class RequestRest extends ConnectionHandler {
     }
 
     public void insertLaporanAngkot(String detail){
-        preferenceManager = new PreferenceManager(mContext);
-        Profile profile = new Gson().fromJson(preferenceManager.getString(Constants.PREF_PROFILE), Profile.class);
+        preferencesManager = new PreferencesManager(mContext);
+        Profile profile = new Gson().fromJson(preferencesManager.getString(Constants.PREF_PROFILE), Profile.class);
         String session = profile.getSessionID();
-        float latitude = preferenceManager.getFloat(Constants.ENTITY_LATITUDE, 0.0F);
-        float longitude = preferenceManager.getFloat(Constants.ENTITY_LONGITUDE, 0.0F);
+        float latitude = preferencesManager.getFloat(Constants.ENTITY_LATITUDE, 0.0F);
+        float longitude = preferencesManager.getFloat(Constants.ENTITY_LONGITUDE, 0.0F);
         RequestParams params = new RequestParams();
         params.put("detail", detail);
         params.put("session_id", session);
@@ -159,8 +156,8 @@ public class RequestRest extends ConnectionHandler {
 
 
     public void checkStatus(){
-        preferenceManager = new PreferenceManager(mContext);
-        Profile profile = new Gson().fromJson(preferenceManager.getString(Constants.PREF_PROFILE), Profile.class);
+        preferencesManager = new PreferencesManager(mContext);
+        Profile profile = new Gson().fromJson(preferencesManager.getString(Constants.PREF_PROFILE), Profile.class);
         String session = profile.getSessionID();
         RequestParams params = new RequestParams();
         params.put("session_id", session);
@@ -197,8 +194,8 @@ public class RequestRest extends ConnectionHandler {
 
 
     public void updatePenumpang(String objectID){
-        preferenceManager = new PreferenceManager(mContext);
-        Profile profile = new Gson().fromJson(preferenceManager.getString(Constants.PREF_PROFILE), Profile.class);
+        preferencesManager = new PreferencesManager(mContext);
+        Profile profile = new Gson().fromJson(preferencesManager.getString(Constants.PREF_PROFILE), Profile.class);
         String session = profile.getSessionID();
         RequestParams params = new RequestParams();
         params.put("session_id", session);
@@ -238,8 +235,8 @@ public class RequestRest extends ConnectionHandler {
 
 
     public void checkStatusPenumpang(String objectID){
-        preferenceManager = new PreferenceManager(mContext);
-        Profile profile = new Gson().fromJson(preferenceManager.getString(Constants.PREF_PROFILE), Profile.class);
+        preferencesManager = new PreferencesManager(mContext);
+        Profile profile = new Gson().fromJson(preferencesManager.getString(Constants.PREF_PROFILE), Profile.class);
         String session = profile.getSessionID();
         RequestParams params = new RequestParams();
         params.put("session_id", session);
@@ -314,8 +311,8 @@ public class RequestRest extends ConnectionHandler {
 
 
     public void insertPenumpang(int jumlah, int trayekID, int arahID){
-        preferenceManager = new PreferenceManager(mContext);
-        Profile profile = new Gson().fromJson(preferenceManager.getString(Constants.PREF_PROFILE), Profile.class);
+        preferencesManager = new PreferencesManager(mContext);
+        Profile profile = new Gson().fromJson(preferencesManager.getString(Constants.PREF_PROFILE), Profile.class);
         String session = profile.getSessionID();
         RequestParams params = new RequestParams();
         params.put("session_id", session);

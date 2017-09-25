@@ -13,11 +13,8 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
 
-import com.google.android.gms.location.LocationServices;
 import com.google.gson.Gson;
 import com.rabbitmq.client.AMQP;
-
-import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 
@@ -28,9 +25,8 @@ import project.bsts.semut.connections.broker.Factory;
 import project.bsts.semut.connections.broker.Producer;
 import project.bsts.semut.helper.BroadcastManager;
 import project.bsts.semut.helper.JSONRequest;
-import project.bsts.semut.helper.PreferenceManager;
+import project.bsts.semut.helper.PreferencesManager;
 import project.bsts.semut.pojo.Profile;
-import project.bsts.semut.pojo.Session;
 import project.bsts.semut.setup.Constants;
 import project.bsts.semut.utilities.GetCurrentDate;
 import project.bsts.semut.utilities.LocationUtilities;
@@ -56,7 +52,7 @@ public class GetLocation extends Service implements BrokerCallback {
     private Factory mqFactory;
     private Consumer mqConsumer;
     private Producer mqProducer;
-    private PreferenceManager preferenceManager;
+    private PreferencesManager preferencesManager;
     String session;
     Profile profile;
     private boolean isFirstInit = true, isMqConnectionError = false, isWithStroring = true;
@@ -74,8 +70,8 @@ public class GetLocation extends Service implements BrokerCallback {
         Log.i("STATUS", "Get Loc Service Created");
 
         broadcastManager = new BroadcastManager(getApplicationContext());
-        preferenceManager = new PreferenceManager(getApplicationContext());
-        profile = new Gson().fromJson(preferenceManager.getString(Constants.PREF_PROFILE), Profile.class);
+        preferencesManager = new PreferencesManager(getApplicationContext());
+        profile = new Gson().fromJson(preferencesManager.getString(Constants.PREF_PROFILE), Profile.class);
         session = profile.getSessionID();
       //  if(isWithStroring) connectToRabbit();
       //  if(isWithStroring) consume();
@@ -114,9 +110,9 @@ public class GetLocation extends Service implements BrokerCallback {
                 if (latService!=0.0 || lngService!=0.0){
                     if(isWithStroring) startCollectingMap();
                     Log.i("STATUS", "Location changed Alt: " + altService + " Lat: " + latService + " Lon: " + lngService + " Spd: " + spdService);
-                    preferenceManager.save((float)latService, Constants.ENTITY_LATITUDE);
-                    preferenceManager.save((float)lngService, Constants.ENTITY_LONGITUDE);
-                    preferenceManager.apply();
+                    preferencesManager.save((float)latService, Constants.ENTITY_LATITUDE);
+                    preferencesManager.save((float)lngService, Constants.ENTITY_LONGITUDE);
+                    preferencesManager.apply();
                     broadCastMessage(Constants.BROADCAST_MY_LOCATION, JSONRequest.myLocation(latService, lngService));
                 }
                 handler.postDelayed(this, 10000);
@@ -162,8 +158,8 @@ public class GetLocation extends Service implements BrokerCallback {
                 .build();
         mqProducer.setRoutingkey(Constants.ROUTING_KEY_UPDATE_LOCATION);
         String message = JSONRequest.storeLocation(session, altService, NumUtils.round(latService, 7), NumUtils.round(lngService,7), spdService,
-                GetCurrentDate.now(), preferenceManager.getInt(Constants.MAP_RADIUS, 3) * 1000,
-                preferenceManager.getInt(Constants.MAP_LIMIT, 6), MapItem.get(getApplicationContext()), preferenceManager.getInt(Constants.IS_ONLINE, 0));
+                GetCurrentDate.now(), preferencesManager.getInt(Constants.MAP_RADIUS, 3) * 1000,
+                preferencesManager.getInt(Constants.MAP_LIMIT, 6), MapItem.get(getApplicationContext()), preferencesManager.getInt(Constants.IS_ONLINE, 0));
         Log.i(TAG, message);
         mqProducer.publish(message, props, false);
     }

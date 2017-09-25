@@ -1,49 +1,29 @@
 package project.bsts.semut.fragments.map;
 
 import android.app.Fragment;
-import android.app.Notification;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.NotificationCompat;
 import android.text.Html;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.firebase.jobdispatcher.Driver;
 import com.firebase.jobdispatcher.FirebaseJobDispatcher;
 import com.firebase.jobdispatcher.GooglePlayDriver;
 import com.google.gson.Gson;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-
-import project.bsts.semut.LoginActivity;
 import project.bsts.semut.R;
 import project.bsts.semut.TrackerActivity;
-import project.bsts.semut.connections.rest.IConnectionResponseHandler;
 import project.bsts.semut.connections.rest.RequestRest;
-import project.bsts.semut.helper.PreferenceManager;
+import project.bsts.semut.helper.PreferencesManager;
 import project.bsts.semut.pojo.RequestStatus;
-import project.bsts.semut.pojo.trayek.Trayek;
 import project.bsts.semut.setup.Constants;
 import project.bsts.semut.ui.CommonAlerts;
 
@@ -56,7 +36,7 @@ public class OnWaitingFragment extends Fragment {
 
     ProgressDialog mDialog;
 
-    private PreferenceManager preferenceManager;
+    private PreferencesManager preferencesManager;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -74,22 +54,22 @@ public class OnWaitingFragment extends Fragment {
         mCloseBtn.setOnClickListener(v -> getActivity().finish());
         mCancelBtn.setOnClickListener(v -> toTrackActivity());
 
-        preferenceManager = new PreferenceManager(getActivity());
-        String totalWaiting = String.valueOf(preferenceManager.getInt(Constants.PREFS_WAITING_COUNT, 0));
-        String route = preferenceManager.getString(Constants.PREFS_WAITING_ROUTE);
+        preferencesManager = new PreferencesManager(getActivity());
+        String totalWaiting = String.valueOf(preferencesManager.getInt(Constants.PREFS_WAITING_COUNT, 0));
+        String route = preferencesManager.getString(Constants.PREFS_WAITING_ROUTE);
         String tmp = "Anda dalam status sedang menunggu Angkot dengan jumlah penumpang <b>"+totalWaiting+" </b>" +
                 " dan angkot dengan arah <b>"+route+"</b>. Apakah Anda akan mengakhiri status menunggu ?";
         mTitle.setText(Html.fromHtml(tmp));
 
         mYesBtn.setOnClickListener(v -> {
-            String obejctID = preferenceManager.getString(Constants.PREFS_WAITING_STATUS_OBJECT_ID);
+            String obejctID = preferencesManager.getString(Constants.PREFS_WAITING_STATUS_OBJECT_ID);
             new RequestRest(getActivity(), (pResult, type) -> {
                 if(type.contains(Constants.REST_UPDATE_PENUMPANG)){
                     RequestStatus requestStatus = new Gson().fromJson(pResult, RequestStatus.class);
                     if(requestStatus.getSuccess()){
                         cancelNotification();
-                        preferenceManager.save(false, Constants.PREFS_IS_WAITING);
-                        preferenceManager.apply();
+                        preferencesManager.save(false, Constants.PREFS_IS_WAITING);
+                        preferencesManager.apply();
 
                         Driver driver = new GooglePlayDriver(getActivity());
                         FirebaseJobDispatcher firebaseJobDispatcher = new FirebaseJobDispatcher(driver);

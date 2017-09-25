@@ -1,18 +1,13 @@
 package project.bsts.semut;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.content.res.Resources;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
-import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.IntentCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -47,7 +42,6 @@ import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.Overlay;
 
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -58,7 +52,7 @@ import project.bsts.semut.connections.broker.Consumer;
 import project.bsts.semut.connections.broker.Factory;
 import project.bsts.semut.helper.BroadcastManager;
 import project.bsts.semut.helper.PermissionHelper;
-import project.bsts.semut.helper.PreferenceManager;
+import project.bsts.semut.helper.PreferencesManager;
 import project.bsts.semut.map.MarkerBearing;
 import project.bsts.semut.map.osm.MarkerClick;
 import project.bsts.semut.map.osm.OSMarkerAnimation;
@@ -66,8 +60,6 @@ import project.bsts.semut.map.osm.OsmMarker;
 import project.bsts.semut.pojo.angkot.Angkot;
 import project.bsts.semut.pojo.angkot.AngkotPost;
 import project.bsts.semut.pojo.mapview.MyLocation;
-import project.bsts.semut.pojo.mapview.Tracker;
-import project.bsts.semut.services.GetLocation;
 import project.bsts.semut.services.LocationService;
 import project.bsts.semut.setup.Constants;
 import project.bsts.semut.ui.AnimationView;
@@ -472,9 +464,9 @@ public class TrackerActivity extends AppCompatActivity implements BrokerCallback
         popup.setOnMenuItemClickListener(item1 -> {
             switch (item1.getItemId()) {
                 case R.id.logout:
-                    PreferenceManager preferenceManager = new PreferenceManager(context);
-                    preferenceManager.save(false, Constants.IS_LOGGED_IN);
-                    preferenceManager.apply();
+                    PreferencesManager preferencesManager = new PreferencesManager(context);
+                    preferencesManager.save(false, Constants.IS_LOGGED_IN);
+                    preferencesManager.apply();
                     Intent intent = new Intent(context, LoginActivity.class);
                   //  intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     ComponentName cn = intent.getComponent();
@@ -515,6 +507,7 @@ public class TrackerActivity extends AppCompatActivity implements BrokerCallback
 
                 } else {
                     GeoPoint currPoint = new GeoPoint(myLocationObject.getMyLatitude(), myLocationObject.getMyLongitude());
+                    if(markerMyLocation == null) markerMyLocation = osmMarker.add(myLocationObject);
                     markerMyLocation.setRotation((float) MarkerBearing.bearing(markerMyLocation.getPosition().getLatitude(),
                             markerMyLocation.getPosition().getLongitude(), currPoint.getLatitude(), currPoint.getLongitude()));
                   //  if (isTracked) mapController.animateTo(markerMyLocation.getPosition());

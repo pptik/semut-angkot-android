@@ -13,7 +13,7 @@ import com.mikepenz.iconics.IconicsDrawable;
 
 import project.bsts.semut.LoginActivity;
 import project.bsts.semut.R;
-import project.bsts.semut.helper.PreferenceManager;
+import project.bsts.semut.helper.PreferencesManager;
 import project.bsts.semut.setup.Constants;
 
 public class CommonAlerts {
@@ -51,16 +51,16 @@ public class CommonAlerts {
                 .setPositiveButtonText("OK")
                 .setPositiveColor(R.color.primary_dark)
                 .setOnPositiveClicked((view, dialog) -> {
-                  /*  PreferenceManager preferenceManager = new PreferenceManager(context);
-                    preferenceManager.save(false, Constants.IS_LOGGED_IN);
-                    preferenceManager.apply();
+                  /*  PreferencesManager preferencesManager = new PreferencesManager(context);
+                    preferencesManager.save(false, Constants.IS_LOGGED_IN);
+                    preferencesManager.apply();
                     context.startActivity(new Intent(context, LoginActivity.class));
                     ((Activity)context).finish(); */
 
 
-                    PreferenceManager preferenceManager = new PreferenceManager(context);
-                    preferenceManager.save(false, Constants.IS_LOGGED_IN);
-                    preferenceManager.apply();
+                    PreferencesManager preferencesManager = new PreferencesManager(context);
+                    preferencesManager.save(false, Constants.IS_LOGGED_IN);
+                    preferencesManager.apply();
                     Intent intent = new Intent(context, LoginActivity.class);
                     //  intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     ComponentName cn = intent.getComponent();
