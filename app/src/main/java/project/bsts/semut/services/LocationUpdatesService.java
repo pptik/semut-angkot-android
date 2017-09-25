@@ -31,6 +31,7 @@ import java.util.Date;
 
 import project.bsts.semut.R;
 import project.bsts.semut.SplashScreenActivity;
+import project.bsts.semut.utilities.Logger;
 import project.bsts.semut.utilities.Utils;
 
 /**
@@ -110,7 +111,7 @@ public class LocationUpdatesService extends Service {
      */
     private Location mLocation;
 
-    //Logger logger;
+    Logger logger;
 
     public LocationUpdatesService() {
     }
@@ -290,14 +291,14 @@ public class LocationUpdatesService extends Service {
 
     private void onNewLocation(Location location) {
         Log.i(TAG, "New location: " + location);
-        //logger.addRecordToLog(new Date().toString()+" : "+location );
+        logger.addRecordToLog(new Date().toString()+" : "+location );
 
         mLocation = location;
 
         // Notify anyone listening for broadcasts about the new location.
-        Intent intent = new Intent(ACTION_BROADCAST);
+    /*    Intent intent = new Intent(ACTION_BROADCAST);
         intent.putExtra(EXTRA_LOCATION, location);
-        LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
+        LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent); */
 
         // Update notification content if running as a foreground service.
         if (serviceIsRunningInForeground(this)) {

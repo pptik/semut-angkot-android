@@ -61,7 +61,6 @@ public class SplashScreenActivity extends AppCompatActivity
     boolean isApprove;
     private static final String TAG = SplashScreenActivity.class.getSimpleName();
     private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 34;
-    private MyReceiver myReceiver;
     private LocationUpdatesService mService = null;
 
     // Tracks the bound state of the service.
@@ -134,13 +133,11 @@ public class SplashScreenActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
-        LocalBroadcastManager.getInstance(this).registerReceiver(myReceiver,
-                new IntentFilter(LocationUpdatesService.ACTION_BROADCAST));
+
     }
 
     @Override
     protected void onPause() {
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(myReceiver);
         super.onPause();
     }
 
@@ -268,7 +265,7 @@ public class SplashScreenActivity extends AppCompatActivity
     }
 
 
-    private class MyReceiver extends BroadcastReceiver {
+    /*private class MyReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
             Location location = intent.getParcelableExtra(LocationUpdatesService.EXTRA_LOCATION);
@@ -277,7 +274,7 @@ public class SplashScreenActivity extends AppCompatActivity
                         Toast.LENGTH_SHORT).show();
             }
         }
-    }
+    } */
 
 
 
